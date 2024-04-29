@@ -63,9 +63,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b7d158d6a1bc3f34488ecced83528f27, type: 2}
-  - {fileID: 2100000, guid: 13e405764de6da44aaa575a1d604532d, type: 2}
-  - {fileID: 2100000, guid: 4307e02f839dcdf4aa46fb9ff24a638c, type: 2}
+  - {fileID: 2100000, guid: 7f0adf77d0237a144b51ea1889937214, type: 2}
+  - {fileID: 2100000, guid: 8ba89562a0762a34eae48a3e773c1503, type: 2}
+  - {fileID: 2100000, guid: e388368ef5a44a9419fb32b9bfc08ae2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 8163621680840187671}
   - component: {fileID: 524774532030396260}
   - component: {fileID: 825007168127717944}
+  - component: {fileID: 8749706503982514802}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Enemy
@@ -131,7 +132,7 @@ Rigidbody:
   m_GameObject: {fileID: 4300885597411107687}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 10
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -184,4 +185,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b860a2362d691854b802bc7732974877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 22
+  _speed: 30
+  _angularSpeed: 500
+  _speedMagnification:
+  - 0.5
+  - 0.8
+  - 1
+  - 1.25
+  - 1.5
+  _particleSystem: {fileID: 2594693758009780271, guid: c52a9424a8a25254084e609e6e04fd78, type: 3}
+--- !u!195 &8749706503982514802
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4300885597411107687}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 4
+  m_Speed: 0
+  m_Acceleration: 0
+  avoidancePriority: 50
+  m_AngularSpeed: 0
+  m_StoppingDistance: 3
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 10
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
