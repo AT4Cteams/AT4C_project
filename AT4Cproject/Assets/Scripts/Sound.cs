@@ -28,6 +28,9 @@ public class Sound : MonoBehaviour
     [SerializeField]
     private static float _originalSize = 40;
 
+    [SerializeField]
+    private float[] _volume = new float[5];
+
     [HideInInspector]
     public SoundLevel level;
 
@@ -38,6 +41,7 @@ public class Sound : MonoBehaviour
     private GameObject _areaObject;
 
     public bool isHit { get; set; }
+    public float volume { get { return _volume[(int)level]; }}
 
     // Start is called before the first frame update
     void Start()

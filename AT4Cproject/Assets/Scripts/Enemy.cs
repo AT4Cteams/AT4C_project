@@ -36,11 +36,6 @@ public class Enemy : MonoBehaviour
     //! エネミーの状態
     private EnemyStateContext _context;
 
-    // 最後に聞いた音のレベル
-    private SoundLevel _listenedSoundLv;
-
-    private Sound _targetSound;
-
     private Vector3 _targetPos;
 
     private NavMeshAgent _agent;
@@ -50,9 +45,8 @@ public class Enemy : MonoBehaviour
     // プロパティ==================================
     public float speed => _speed;
     public float angularSpeed => _angularSpeed;
-    public SoundLevel listenedSoundLv
-    { get { return _listenedSoundLv; } set { _listenedSoundLv = value; } }
     public Vector3 targetPos => _targetPos;
+    public float targetVolume { get { return _targetVolume; } set { _targetVolume = value; } }
     public NavMeshAgent agent => _agent;
 
     // ===========================================
@@ -62,7 +56,7 @@ public class Enemy : MonoBehaviour
     {
         // Stateを初期化
         _context = new EnemyStateContext();
-        _context.Init(this, EnemyState.Idle);
+        _context.Init(this, EnemyState.Wander);
     }
     private void Start()
     {
@@ -85,12 +79,11 @@ public class Enemy : MonoBehaviour
 
     public void ChangeTargetSound(Sound targetSound)
     {
-        _targetSound = targetSound;
-        _targetPos = _targetSound.transform.position;
-        _listenedSoundLv = targetSound.level;
+        _targetPos = targetSound.transform.position;
+
         _agent.SetDestination(_targetPos);
 
-        SetSpeedLevel(_targetSound.level);
+        SetSpeedLevel(targetSound.level);
     }
 
     private void SetSpeedLevel(SoundLevel level)
@@ -108,10 +101,10 @@ public class Enemy : MonoBehaviour
 
             float dist = Vector3.Distance(transform.position, other.transform.position);
 
-            float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.level);
+            float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.volume);
 
             // 音を未感知の場合、ターゲットとステートを変更
-            if (_context.CheckState(EnemyState.Idle))
+            if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander))
             {
                 //Debug.Log("音が聞こえた！！");
 
@@ -136,17 +129,17 @@ public class Enemy : MonoBehaviour
         Instantiate(_particleSystem, transform.position, Quaternion.Euler(90f, 0f, 0f));
     }
 
-    public float _TargetVolumeCalc(float dist, float level)
+    public float _TargetVolumeCalc(float dist, float volume)
     {
         float maxDistance = 50f;
 
         dist = Mathf.Min(maxDistance - 0.01f, dist);
 
-        float gennsui = (1.0f - (dist / maxDistance)) * 0.7f;
+        float gennsui = (1.0f - (dist / maxDistance));
 
-        float nextTargetVolume = (((float)level + 1f) * gennsui);
+        float nextTargetVolume = ((volume) * gennsui);
 
-        Debug.Log(nextTargetVolume);
+        Debug.Log("聞いた音量 : " + nextTargetVolume);
 
 
         return nextTargetVolume;

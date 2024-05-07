@@ -70,24 +70,9 @@ public class EnemyStateTracking : IEnemyState
 
             _enemy.EffectTest();
 
-            _enemy.listenedSoundLv = SoundLevel.lv1;
+            _enemy.targetVolume = 0f;
 
-            _enemy.ChangeState(EnemyState.Idle);
+            _enemy.ChangeState(EnemyState.Wander);
         }
     }
-
-    //// ‹——£‚ª‰“‚­‚È‚Á‚½‚ç
-    //private void TooFar()
-    //{
-    //    Vector3 targetPos = _enemy._targetPos;
-    //    Vector3 enemyPos = _enemy.transform.position;
-
-    //    float distance = Vector3.Distance(targetPos, enemyPos);
-
-    //    if (distance > _enemy._searchLength * 3f)
-    //    {
-    //        _enemy.ChangeState(EnemyState.Idle);
-    //        Debug.Log("‰“‚¢‚æ`");
-    //    }
-    //}
 }
