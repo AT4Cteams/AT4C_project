@@ -887,7 +887,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2685791615269898113, guid: 7182c33ae7a52644fb0abf751c6bb35c, type: 3}
       propertyPath: _coolTime
-      value: 60
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6642053909156850808, guid: 7182c33ae7a52644fb0abf751c6bb35c, type: 3}
       propertyPath: m_LocalScale.x

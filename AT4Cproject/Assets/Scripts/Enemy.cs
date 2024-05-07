@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
 
     private NavMeshAgent _agent;
 
+    private float _targetVolume = 0f;
 
     // プロパティ==================================
     public float speed => _speed;
@@ -105,17 +106,24 @@ public class Enemy : MonoBehaviour
         {
             sound.isHit = true;
 
+            float dist = Vector3.Distance(transform.position, other.transform.position);
+
+            float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.level);
+
             // 音を未感知の場合、ターゲットとステートを変更
             if (_context.CheckState(EnemyState.Idle))
             {
-                Debug.Log("音が聞こえた！！");
+                //Debug.Log("音が聞こえた！！");
 
+                _targetVolume = nextTargetVolume;
                 ChangeTargetSound(sound);
                 ChangeState(EnemyState.Tracking);
             }
-            else if ((int)sound.level >= (int)_listenedSoundLv)
+            else if (nextTargetVolume >= _targetVolume)
             {
-                Debug.Log("もっと大きい音が聞こえた！！");
+                //Debug.Log("もっと大きい音が聞こえた！！");
+
+                _targetVolume = nextTargetVolume;
 
                 // ステートの変更はせずにターゲットのみ変更
                 ChangeTargetSound(sound);
@@ -126,5 +134,21 @@ public class Enemy : MonoBehaviour
     public void EffectTest()
     {
         Instantiate(_particleSystem, transform.position, Quaternion.Euler(90f, 0f, 0f));
+    }
+
+    public float _TargetVolumeCalc(float dist, float level)
+    {
+        float maxDistance = 50f;
+
+        dist = Mathf.Min(maxDistance - 0.01f, dist);
+
+        float gennsui = (1.0f - (dist / maxDistance)) * 0.7f;
+
+        float nextTargetVolume = (((float)level + 1f) * gennsui);
+
+        Debug.Log(nextTargetVolume);
+
+
+        return nextTargetVolume;
     }
 }

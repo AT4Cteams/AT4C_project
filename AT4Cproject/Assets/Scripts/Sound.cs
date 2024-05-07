@@ -8,6 +8,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -23,6 +24,10 @@ public enum SoundLevel
 
 public class Sound : MonoBehaviour
 {
+
+    [SerializeField]
+    private static float _originalSize = 40;
+
     [HideInInspector]
     public SoundLevel level;
 
@@ -62,6 +67,10 @@ public class Sound : MonoBehaviour
     {
         GameObject newSound = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
 
+        float size = _originalSize * (soundLevel + 1);
+
+        newSound.transform.localScale =  new Vector3(size, 0.1f, size);
+
         newSound.GetComponent<Sound>().SetLevel((SoundLevel)soundLevel);
 
         Instantiate(newSound, position, Quaternion.identity);
@@ -70,6 +79,10 @@ public class Sound : MonoBehaviour
     public static void Generate(SoundLevel soundLevel, Vector3 position)
     {
         GameObject newSound = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+
+        float size = _originalSize * ((int)soundLevel + 1);
+
+        newSound.transform.localScale = new Vector3(size, 0.1f, size);
 
         newSound.GetComponent<Sound>().SetLevel(soundLevel);
 
