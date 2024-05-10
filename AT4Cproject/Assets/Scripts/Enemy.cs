@@ -2,9 +2,9 @@
  * @brief エネミー
  * @author 村上
  * 
- * @details 音が鳴ったらIdle状態からTracking状態に遷移します @n
+ * @details 音が鳴ったらTracking状態に遷移します @n
  *          (OnTriggerStayで音の感知をし、Trackingに遷移) @n
- *          聞いている中で最大レベルの音を追尾(同じレベルの場合、最後に聞いた方を追尾)
+ *          聞いている中で最大音量の音の発生源位置に移動
  */
 using System.Collections;
 using System.Collections.Generic;
@@ -30,9 +30,8 @@ public class Enemy : MonoBehaviour
 
     [Space]
 
-    // 目的地に着いた時に生成する"仮のエフェクト"
     [SerializeField]
-    private GameObject _particleSystem;
+    private GameObject _attackEffect;
 
     //! エネミーの状態
     private EnemyStateContext _context;
@@ -42,6 +41,9 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _agent;
 
     private float _targetVolume = 0f;
+
+    [SerializeField]
+    private AttackArea _attackArea;
 
     [SerializeField]
     public NavMeshSurface navMeshSurface;
@@ -58,7 +60,6 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        // Stateを初期化
         _context = new EnemyStateContext();
         _context.Init(this, EnemyState.Wander);
     }
@@ -69,7 +70,6 @@ public class Enemy : MonoBehaviour
         _originalSpeed = _speed;
     }
 
-    // Update is called once per frame
     private void Update()
     {
         // 状態ごとのUpdate
@@ -103,16 +103,12 @@ public class Enemy : MonoBehaviour
         {
             sound.isHit = true;
 
-            //float dist = Vector3.Distance(transform.position, other.transform.position);
-
-            //float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.volume);
-
             float nextTargetVolume = sound.volume;
 
             Debug.Log(nextTargetVolume);
 
             // 音を未感知の場合、ターゲットとステートを変更
-            if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander))
+            if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander) || _context.CheckState(EnemyState.Attack))
             {
                 //Debug.Log("音が聞こえた！！");
 
@@ -132,29 +128,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void EffectTest()
-    {
-        Instantiate(_particleSystem, transform.position, Quaternion.Euler(90f, 0f, 0f));
-    }
-
-    public float _TargetVolumeCalc(float dist, float volume)
-    {
-        float maxDistance = 50f;
-
-        dist = Mathf.Min(maxDistance - 0.01f, dist);
-
-        float gennsui = (1.0f - (dist / maxDistance));
-
-        float nextTargetVolume = ((volume) * gennsui);
-
-        Debug.Log("聞いた音量 : " + nextTargetVolume);
-
-
-        return nextTargetVolume;
-    }
-
     public virtual void Attack()
     {
+        Instantiate(_attackEffect, _attackArea.transform.position, Quaternion.Euler(90f, 0f, 0f));
 
+        if (_attackArea.isHit)
+        {
+            Debug.Log("攻撃が当たったよ！");
+        }
+        else
+        {
+            Debug.Log("攻撃当たらなかった...");
+        }
     }
 }

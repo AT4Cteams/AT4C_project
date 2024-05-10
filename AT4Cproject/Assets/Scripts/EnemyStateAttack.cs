@@ -24,7 +24,8 @@ public class EnemyStateAttack : IEnemyState
     public override void Entry()
     {
         _exitTime = 1f;
-        _enemy.EffectTest();
+
+        _enemy.Attack();
 
         _enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
