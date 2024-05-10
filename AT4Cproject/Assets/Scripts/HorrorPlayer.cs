@@ -76,28 +76,44 @@ public class HorrorPlayer : MonoBehaviour
         }
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        RaycastHit _hit;
         RaycastHit hit;
 
         //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out _hit, Mathf.Infinity))
         {
-            hitObject = hit.collider.gameObject;
-            if (hitObject.TryGetComponent<Outline>(out Outline component))
+            //hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+            //hitObject = hit.collider.gameObject;
+            if (_hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && _hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
+                if (hitObject != null)
+                {
+                    hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+                    hitObject = null;
+                }
+                hitObject = _hit.collider.gameObject;
                 hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 255);
             }
-
-        }
-        else
-        {
-            if (hitObject != null)
+            else
             {
-                if (hitObject.TryGetComponent<Outline>(out Outline component))
+                if (hitObject != null)
                 {
                     hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
                     hitObject = null;
                 }
             }
+            //if (hitObject != null)
+            //{
+            //    if (hitObject.TryGetComponent<Outline>(out Outline component) && hitObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            //    {
+            //        hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+            //        hitObject = null;
+            //    }
+            //}
+        }
+        else
+        {
+            hitObject = null;
         }
 
 
@@ -109,18 +125,25 @@ public class HorrorPlayer : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    grabObj = hit.collider.gameObject;
-                    grabObj.GetComponent<Rigidbody>().isKinematic = true;
-                    grabObj.transform.position = grabPoint.position;
-                    grabObj.transform.SetParent(grabPoint.transform);
+                    if (hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    {
+                        grabObj = hit.collider.gameObject;
+                        grabObj.GetComponent<Rigidbody>().isKinematic = true;
+                        grabObj.transform.position = grabPoint.position;
+                        grabObj.transform.SetParent(grabPoint.transform);
+                    }
+                    
                 }
             }
             else
             {
-                grabObj.GetComponent<Rigidbody>().isKinematic = false;
-                grabObj.transform.SetParent(null);
-                grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
-                grabObj = null;
+                if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    grabObj.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObj.transform.SetParent(null);
+                    grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+                    grabObj = null;
+                }
             }
 
 
