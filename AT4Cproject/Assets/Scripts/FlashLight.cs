@@ -40,17 +40,17 @@ public class FlashLight : MonoBehaviour
         UpdateSpotAngle();
 
 
-        GameObject target = GameObject.FindWithTag("Enemy");
-        if (!target) return;
+        //GameObject target = GameObject.FindWithTag("Enemy");
+        //if (!target) return;
 
-        float dis = Vector3.Distance(target.transform.position, this.transform.position);
+        //float dis = Vector3.Distance(target.transform.position, this.transform.position);
 
-        if (dis < _blinkingDis) Blinking();
-        else
-        {
-            _count = 0f;
-            _light.intensity = _maxintencity;
-        }
+        //if (dis < _blinkingDis) Blinking();
+        //else
+        //{
+        //    _count = 0f;
+        //    _light.intensity = _maxintencity;
+        //}
     }
 
     private void Blinking()

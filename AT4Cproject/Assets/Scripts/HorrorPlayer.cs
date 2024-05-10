@@ -85,14 +85,14 @@ public class HorrorPlayer : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    
+                    if (hit.collider.tag != "GetItem") return;
                     //Rayが当たったオブジェクトの名前と位置情報をログに表示する
                     //Debug.Log(hit.collider.gameObject.name);
                     //Debug.Log(hit.collider.gameObject.transform.position);
                     grabObj = hit.collider.gameObject;
                     grabObj.GetComponent<Rigidbody>().isKinematic = true;
                     grabObj.transform.position = grabPoint.position;
-                    grabObj.transform.SetParent(transform);
+                    grabObj.transform.SetParent(Camera.main.transform);
                 }
                 
                
@@ -149,6 +149,7 @@ public class HorrorPlayer : MonoBehaviour
         v = v.normalized;
 
         _rigidbody.AddForce(v * _jetForce, ForceMode.Impulse);
+        Sound.Generate(SoundLevel.lv3, transform.position);
     }
 
     private void UseLight()
