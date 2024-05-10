@@ -13,6 +13,13 @@ public class HorrorPlayer : MonoBehaviour
     [Header("ダッシュスピード")]
     public float _jetForce = 1f;
 
+    [Header("オブジェクトの発射速度")]
+    public float _shootPower = 3000;
+
+    [Header("オブジェクトの発射速度")]
+    public GameObject instantiateObject;
+
+
     [Header("ライト")]
     private GameObject _light;
 
@@ -26,6 +33,11 @@ public class HorrorPlayer : MonoBehaviour
 
     private bool _isJump = true;
 
+    [SerializeField] private Transform grabPoint;
+    [SerializeField] private Transform rayPoint;
+    private float rayDistance = 0.2f;
+    private GameObject grabObj;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +72,48 @@ public class HorrorPlayer : MonoBehaviour
         {
             UseLight();
         }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+            RaycastHit hit;
+
+            if (grabObj == null)
+            {
+                
+
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    
+                    //Rayが当たったオブジェクトの名前と位置情報をログに表示する
+                    //Debug.Log(hit.collider.gameObject.name);
+                    //Debug.Log(hit.collider.gameObject.transform.position);
+                    grabObj = hit.collider.gameObject;
+                    grabObj.GetComponent<Rigidbody>().isKinematic = true;
+                    grabObj.transform.position = grabPoint.position;
+                    grabObj.transform.SetParent(transform);
+                }
+                
+               
+            }
+            else
+            {
+                grabObj.GetComponent<Rigidbody>().isKinematic = false;
+                grabObj.transform.SetParent(null);
+                grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+                grabObj = null;
+            }
+
+
+        }
+
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    GameObject projectile = Instantiate(instantiateObject,transform.position,Quaternion.identity);
+        //    projectile.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+        //}
     }
 
     private void Moving()
