@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HorrorPlayer : MonoBehaviour
 {
@@ -37,7 +38,8 @@ public class HorrorPlayer : MonoBehaviour
     [SerializeField] private Transform rayPoint;
     private float rayDistance = 0.2f;
     private GameObject grabObj;
-    
+    private GameObject hitObject;
+
 
     // Start is called before the first frame update
     void Start()
@@ -68,34 +70,50 @@ public class HorrorPlayer : MonoBehaviour
             Jet();
         }
 
-        if(Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E))
         {
             UseLight();
         }
 
+        Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        RaycastHit hit;
+
+        //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            hitObject = hit.collider.gameObject;
+            if (hitObject.TryGetComponent<Outline>(out Outline component))
+            {
+                hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 255);
+            }
+
+        }
+        else
+        {
+            if (hitObject != null)
+            {
+                if (hitObject.TryGetComponent<Outline>(out Outline component))
+                {
+                    hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+                    hitObject = null;
+                }
+            }
+        }
+
+
         if (Input.GetKeyUp(KeyCode.F))
         {
-            Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
-            RaycastHit hit;
+
 
             if (grabObj == null)
             {
-                
-
-
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    if (hit.collider.tag != "GetItem") return;
-                    //Rayが当たったオブジェクトの名前と位置情報をログに表示する
-                    //Debug.Log(hit.collider.gameObject.name);
-                    //Debug.Log(hit.collider.gameObject.transform.position);
                     grabObj = hit.collider.gameObject;
                     grabObj.GetComponent<Rigidbody>().isKinematic = true;
                     grabObj.transform.position = grabPoint.position;
-                    grabObj.transform.SetParent(Camera.main.transform);
+                    grabObj.transform.SetParent(grabPoint.transform);
                 }
-                
-               
             }
             else
             {
