@@ -14,7 +14,7 @@ public class HorrorCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _target = GameObject.FindGameObjectWithTag("Player");
+        //_target = GameObject.FindGameObjectWithTag("Player");
         Cursor.lockState = CursorLockMode.Locked;
     }
 
