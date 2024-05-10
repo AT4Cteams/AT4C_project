@@ -13,6 +13,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 public enum SoundLevel
 {
     lv1,
@@ -83,6 +84,25 @@ public class Sound : MonoBehaviour
         newSound.GetComponent<Sound>().SetLevel(soundLevel);
 
         Instantiate(newSound, position, Quaternion.identity);
+    }
+
+
+    // 速度によってレベル変更
+    public static void VelocityToGenerate(GameObject gameObject)
+    {
+        GameObject newSound = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        float velocity = gameObject.GetComponent<Rigidbody>().velocity.magnitude;
+        SoundLevel sl;
+
+        if (velocity > 20) sl = SoundLevel.lv5;
+        else if (velocity > 15) sl = SoundLevel.lv4;
+        else if (velocity > 10) sl = SoundLevel.lv3;
+        else if (velocity > 15) sl = SoundLevel.lv2;
+        else sl = SoundLevel.lv1;
+
+        newSound.GetComponent<Sound>().SetLevel(sl);
+
+        Instantiate(newSound, gameObject.transform.position, Quaternion.identity);
     }
 
     private void Expention()

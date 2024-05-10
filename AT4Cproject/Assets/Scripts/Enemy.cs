@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
 
             float nextTargetVolume = sound.volume;
 
-            Debug.Log(nextTargetVolume);
+            //Debug.Log(nextTargetVolume);
 
             // 音を未感知の場合、ターゲットとステートを変更
             if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander) || _context.CheckState(EnemyState.Attack))

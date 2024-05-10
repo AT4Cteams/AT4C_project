@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 6416148151752021984}
   - component: {fileID: 8566844047657665981}
   - component: {fileID: 6673267274589638928}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AttackArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,6 @@ MonoBehaviour:
   - 0.8
   - 1
   - 1.2
-  _particleSystem: {fileID: 2594693758009780271, guid: c52a9424a8a25254084e609e6e04fd78, type: 3}
   _attackEffect: {fileID: 2594693758009780271, guid: d845f25e907a0624182ee8f74e7838fe, type: 3}
   _attackArea: {fileID: 6673267274589638928}
   navMeshSurface: {fileID: 0}

@@ -8,6 +8,8 @@ TagManager:
   - Director
   - Enemy
   - Floor
+  - GetItem
+  - Wall
   layers:
   - Default
   - TransparentFX
