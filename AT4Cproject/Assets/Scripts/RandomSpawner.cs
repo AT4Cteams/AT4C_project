@@ -46,7 +46,7 @@ public class RandomSpawner : MonoBehaviour
 
             int level = Random.Range(0, 5);
 
-            Sound.Generate(level, pos);
+            Sound.Generate((SoundLevel)level, pos);
         }
     }
 }

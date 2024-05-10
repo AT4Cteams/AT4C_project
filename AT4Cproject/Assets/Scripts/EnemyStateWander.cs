@@ -8,16 +8,21 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Playables;
 
 public class EnemyStateWander : IEnemyState
 {
     private float _randomRange = 20f;
     private float _angleSpeedMag = 0.5f;
-    private float _speedMag = 0.25f;
+    private float _speedMag = 0.5f;
     private Vector3 _nextPos = Vector3.zero;
+    private Vector3 _prevPos = Vector3.zero;
+
+    private int _randomCount = 0;
 
     Enemy _enemy;
 
@@ -26,6 +31,9 @@ public class EnemyStateWander : IEnemyState
     public override void Entry() 
     {
         _nextPos = NextRandomPos();
+        _prevPos = _nextPos;
+
+        _enemy.agent.SetDestination(_nextPos);
     }
     public override void Update()
     {
@@ -66,11 +74,47 @@ public class EnemyStateWander : IEnemyState
 
     private Vector3 NextRandomPos()
     {
-        Vector3 nextPos;
+        Vector3 nextPos = Vector3.zero;
 
-        nextPos = new Vector3(_enemy.transform.position.x + Random.Range(-_randomRange, _randomRange), _enemy.transform.position.y,
-                                _enemy.transform.position.z + Random.Range(-_randomRange, _randomRange));
+        while (true)
+        {
+            Vector2 randValue1 = new Vector2(Random.Range(_randomRange / 2, _randomRange), Random.Range(_randomRange / 2, _randomRange));
+            Vector2 randValue2 = new Vector2(Random.Range(-_randomRange / 2, -_randomRange), Random.Range(-_randomRange / 2, -_randomRange));
 
+            int n = Random.Range(0, 2);
+            int m = Random.Range(0, 2);
+
+            Vector2 randValue;
+            randValue.x = (n == 0) ? randValue1.x : randValue2.x;
+            randValue.y = (m == 0) ? randValue1.y : randValue2.y;
+
+            nextPos = new Vector3(_enemy.transform.position.x + randValue.x, _enemy.transform.position.y,
+                                    _enemy.transform.position.z + randValue.y);
+
+            if (IsInNavMeshBounds(nextPos))
+            {
+                _randomCount = 0;
+                break;
+            }
+            else
+            {
+                _randomCount++;
+                if(_randomCount > 10)
+                {
+                    _randomCount = 0;
+                    nextPos = _prevPos;
+                    return nextPos;
+                }
+            }
+        }
         return nextPos;
+    }
+
+    // 指定された位置がNavMeshの範囲内にあるかどうかを判断するメソッド
+    private bool IsInNavMeshBounds(Vector3 point)
+    {
+        NavMeshHit hit;
+        // NavMesh上の点をサンプリングして、それが歩行可能かどうかを確認する
+        return NavMesh.SamplePosition(point, out hit, 0.1f, NavMesh.AllAreas);
     }
 }

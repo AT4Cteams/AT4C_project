@@ -35,7 +35,7 @@ public class EnemyStateTracking : IEnemyState
 
     public override void Exit()
     {
-
+        _enemy.agent.SetDestination(_enemy.transform.position);
     }
 
     private void Move()
@@ -68,11 +68,9 @@ public class EnemyStateTracking : IEnemyState
 
             _isArrived = true;
 
-            _enemy.EffectTest();
-
             _enemy.targetVolume = 0f;
 
-            _enemy.ChangeState(EnemyState.Wander);
+            _enemy.ChangeState(EnemyState.Attack);
         }
     }
 }

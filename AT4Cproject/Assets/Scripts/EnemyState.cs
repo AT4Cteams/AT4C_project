@@ -16,7 +16,7 @@ public enum EnemyState
     Idle,
     Tracking,
     Wander,
-
+    Attack,
 }
 
 public class EnemyStateContext
@@ -37,6 +37,7 @@ public class EnemyStateContext
             { EnemyState.Idle, new EnemyStateIdle(enemy) },
             { EnemyState.Tracking, new EnemyStateTracking(enemy) },
             { EnemyState.Wander, new EnemyStateWander(enemy) },
+            { EnemyState.Attack, new EnemyStateAttack(enemy) },
         };
         _stateTable = table;
         _currentState = _stateTable[initState];

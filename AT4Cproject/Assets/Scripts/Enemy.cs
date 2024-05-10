@@ -8,6 +8,7 @@
  */
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,7 +19,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    [Range(5, 100)] private float _speed;
+    [Range(1, 30)] private float _speed;
     private float _originalSpeed;
 
     [SerializeField]
@@ -41,6 +42,9 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _agent;
 
     private float _targetVolume = 0f;
+
+    [SerializeField]
+    public NavMeshSurface navMeshSurface;
 
     // プロパティ==================================
     public float speed => _speed;
@@ -77,7 +81,7 @@ public class Enemy : MonoBehaviour
         _context.ChangeState(state);
     }
 
-    public void ChangeTargetSound(Sound targetSound)
+    private void ChangeTargetSound(Sound targetSound)
     {
         _targetPos = targetSound.transform.position;
 
@@ -99,9 +103,13 @@ public class Enemy : MonoBehaviour
         {
             sound.isHit = true;
 
-            float dist = Vector3.Distance(transform.position, other.transform.position);
+            //float dist = Vector3.Distance(transform.position, other.transform.position);
 
-            float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.volume);
+            //float nextTargetVolume = _TargetVolumeCalc(dist, (float)sound.volume);
+
+            float nextTargetVolume = sound.volume;
+
+            Debug.Log(nextTargetVolume);
 
             // 音を未感知の場合、ターゲットとステートを変更
             if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander))
@@ -143,5 +151,10 @@ public class Enemy : MonoBehaviour
 
 
         return nextTargetVolume;
+    }
+
+    public virtual void Attack()
+    {
+
     }
 }

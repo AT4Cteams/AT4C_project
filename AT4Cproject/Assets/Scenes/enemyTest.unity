@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
+  m_AgentTypeID: -1923039037
   m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
@@ -488,13 +488,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy2
       objectReference: {fileID: 0}
+    - target: {fileID: 4300885597411107687, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4597724355671328392, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.2213206
+      value: -3.05
       objectReference: {fileID: 0}
     - target: {fileID: 4597724355671328392, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.4
+      value: 0.26
       objectReference: {fileID: 0}
     - target: {fileID: 4597724355671328392, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -885,6 +889,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundTester
       objectReference: {fileID: 0}
+    - target: {fileID: 6468719908637070882, guid: 692a8cdd7c691714296f76466d0fb0e4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8899308165300038783, guid: 692a8cdd7c691714296f76466d0fb0e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -944,7 +952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2685791615269898113, guid: 7182c33ae7a52644fb0abf751c6bb35c, type: 3}
       propertyPath: _coolTime
-      value: 90
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6642053909156850808, guid: 7182c33ae7a52644fb0abf751c6bb35c, type: 3}
       propertyPath: m_LocalScale.x
@@ -1008,7 +1016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7456463955263830400, guid: 7182c33ae7a52644fb0abf751c6bb35c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -24,7 +24,10 @@ public class EnemyStateIdle : IEnemyState
     public EnemyStateIdle(Enemy enemy) => _enemy = enemy;
     public override void Entry() 
     {
+        _enemy.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         _exitTime = Random.Range(_minTime, _maxTime);
+
+        _enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
     public override void Update() 
     {
@@ -34,8 +37,8 @@ public class EnemyStateIdle : IEnemyState
             _enemy.ChangeState(EnemyState.Wander);
         }
     }
-    public override void Exit() 
+    public override void Exit()
     {
-    
+        _enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 }

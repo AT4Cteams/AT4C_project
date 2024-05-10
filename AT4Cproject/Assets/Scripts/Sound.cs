@@ -1,9 +1,9 @@
-/**
- * @brief ‰¹ƒNƒ‰ƒX
- * @author ‘ºã
+ï»¿/**
+ * @brief éŸ³ã‚¯ãƒ©ã‚¹
+ * @author æ‘ä¸Š
  * 
- * @details Sound.Generate(Sound.SoundLevel.ƒŒƒxƒ‹”, ¶¬‚·‚éƒ|ƒWƒVƒ‡ƒ“); ©‚Å¶¬‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B @n
- *          ‰¹‚Ì•·‚±‚¦‚é”ÍˆÍ‚È‚Ç‚ÍŒãX•ÏX‚ª•K—v
+ * @details Sound.Generate(Sound.SoundLevel.ãƒ¬ãƒ™ãƒ«æ•°, ç”Ÿæˆã™ã‚‹ãƒã‚¸ã‚·ãƒ§ãƒ³); â†ã§ç”Ÿæˆã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚ @n
+ *          éŸ³ã®èã“ãˆã‚‹ç¯„å›²ãªã©ã¯å¾Œã€…å¤‰æ›´ãŒå¿…è¦
  */
 
 using System.Collections;
@@ -24,15 +24,16 @@ public enum SoundLevel
 
 public class Sound : MonoBehaviour
 {
+    private Vector3 _startSize;
+    private float _finishTime = 0f;
+    private float _startTime = 0f;
 
     [SerializeField]
-    private static float _originalSize = 40;
+    private float[] _maxVolume = new float[5];
+    private float _volume = 0f;
 
     [SerializeField]
-    private float[] _volume = new float[5];
-
-    [HideInInspector]
-    public SoundLevel level;
+    private float[] _maxSize = new float[5];
 
     [SerializeField]
     private Material[] _material = new Material[5];
@@ -40,19 +41,25 @@ public class Sound : MonoBehaviour
     [SerializeField]
     private GameObject _areaObject;
 
+    [HideInInspector]
+    public SoundLevel level;
+
     public bool isHit { get; set; }
-    public float volume { get { return _volume[(int)level]; }}
+    public float volume { get { return _volume; }}
 
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("Finish", .3f);
+        _startSize = transform.localScale;
+        _finishTime = 0.5f;
+        _startTime = Time.time;
+        //Invoke("Finish", .3f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Expention();
     }
 
     private void Finish()
@@ -64,32 +71,38 @@ public class Sound : MonoBehaviour
     {
         level = soundLevel;
 
+        SetMaxVolume((int)soundLevel);
+
         _areaObject.GetComponent<MeshRenderer>().material = _material[(int)level];
-    }
-
-    public static void Generate(int soundLevel, Vector3 position)
-    {
-        GameObject newSound = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
-
-        float size = _originalSize * (soundLevel + 1);
-
-        newSound.transform.localScale =  new Vector3(size, 0.1f, size);
-
-        newSound.GetComponent<Sound>().SetLevel((SoundLevel)soundLevel);
-
-        Instantiate(newSound, position, Quaternion.identity);
     }
 
     public static void Generate(SoundLevel soundLevel, Vector3 position)
     {
         GameObject newSound = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
 
-        float size = _originalSize * ((int)soundLevel + 1);
-
-        newSound.transform.localScale = new Vector3(size, 0.1f, size);
-
         newSound.GetComponent<Sound>().SetLevel(soundLevel);
 
         Instantiate(newSound, position, Quaternion.identity);
+    }
+
+    private void Expention()
+    {
+        Vector3 targetScale = new Vector3(_maxSize[(int)level], _maxSize[(int)level], _maxSize[(int)level]);
+
+        float elapsed = Time.time - _startTime;
+        float t = Mathf.Clamp01(elapsed / _finishTime);
+        transform.localScale = Vector3.Lerp(_startSize, targetScale, t);
+
+        if (t >= 1f)
+        {
+            Destroy(this.gameObject);
+        }
+
+        _volume = _maxVolume[(int)level] * (1f - t);
+    }
+
+    private void SetMaxVolume(int level)
+    {
+        _volume = _maxVolume[level];
     }
 }
