@@ -132,26 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109844d1d9553c8489be6a9f4c78a50f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxVolume:
-  - 10
-  - 15
-  - 20
-  - 25
-  - 30
-  _maxSize:
-  - 20
-  - 40
-  - 60
-  - 80
-  - 100
-  _material:
-  - {fileID: 2100000, guid: 1fe97fe3e05af7b4d9e8832be074b9c1, type: 2}
-  - {fileID: 2100000, guid: 78fe34ebbef20584aa4239ebc3c3f342, type: 2}
-  - {fileID: 2100000, guid: d0d582cc43e217248bf5a642189f37b9, type: 2}
-  - {fileID: 2100000, guid: d7c972a6064135b4697324001f36c355, type: 2}
-  - {fileID: 2100000, guid: 6969761c4b66f914db086c48e2eabb86, type: 2}
   _areaObject: {fileID: 6633732043179581327}
-  level: 4
 --- !u!135 &1533684740593463555
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -236,7 +217,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6969761c4b66f914db086c48e2eabb86, type: 2}
+  - {fileID: 2100000, guid: 54a61b7c87addd644aebe4ba88093e77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -87,12 +87,12 @@ public class Enemy : MonoBehaviour
 
         _agent.SetDestination(_targetPos);
 
-        SetSpeedLevel(targetSound.level);
+        SetSpeedLevel(_targetVolume);
     }
 
-    private void SetSpeedLevel(SoundLevel level)
+    private void SetSpeedLevel(float volume)
     {
-        _speed = _originalSpeed * _speedMagnification[(int)level];
+        _speed = _originalSpeed * (1f + (volume * 0.02f));
     }
 
     private void OnTriggerStay(Collider other)
@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
 
             float nextTargetVolume = sound.volume;
 
-            //Debug.Log(nextTargetVolume);
+            Debug.Log(nextTargetVolume);
 
             // 音を未感知の場合、ターゲットとステートを変更
             if (_context.CheckState(EnemyState.Idle) || _context.CheckState(EnemyState.Wander) || _context.CheckState(EnemyState.Attack))
@@ -120,9 +120,9 @@ public class Enemy : MonoBehaviour
             {
                 //Debug.Log("もっと大きい音が聞こえた！！");
 
-                _targetVolume = nextTargetVolume;
 
                 // ステートの変更はせずにターゲットのみ変更
+                _targetVolume = nextTargetVolume;
                 ChangeTargetSound(sound);
             }
         }

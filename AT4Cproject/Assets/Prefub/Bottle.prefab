@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 3870338748622773465}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.228, z: 0}
-  m_LocalScale: {x: 0.49898994, y: 0.49898994, z: 0.49898994}
+  m_LocalPosition: {x: 0, y: 1.381, z: 0}
+  m_LocalScale: {x: 0.49898994, y: 0.3861184, z: 0.49898994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 66084180808127915}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0436a43a9fa36f640889cce835e3c326, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 4989943900395359774}
   - component: {fileID: 1097899555979919377}
   - component: {fileID: 7214237167759469028}
+  - component: {fileID: 7214479252024758083}
   m_Layer: 0
   m_Name: Bottle
   m_TagString: GetItem
@@ -140,7 +141,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7976911656952521165}
@@ -233,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167c6b751a91ed14aa4cdefefa1d4f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _soundLevel: 2
+  _soundVolume: 70
 --- !u!54 &7214237167759469028
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -260,4 +261,22 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!114 &7214479252024758083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6336664832664111723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.9738171, a: 0}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

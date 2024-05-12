@@ -1,34 +1,45 @@
 using UnityEngine;
 using System.Collections;
 
-public class SoundItem : MonoBehaviour
+abstract public class SoundItem : MonoBehaviour
 {
     [SerializeField]
-    [Range(0, 5)]
-    private int _soundLevel;
+    [Range(0, 100)]
+    protected float _soundVolume;
 
-    public AudioSource sound;
-    public float stopSeconds;
-    public string soundName;
+    [SerializeField]
+    protected float _stopSeconds;
+
+    [SerializeField]
+    protected string _soundName;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             //Sound.Generate((SoundLevel)_soundLevel, transform.position);
-            Sound.VelocityToGenerate(this.gameObject);
+            //Sound.VelocityToGenerate(this.gameObject);
 
-            //StartCoroutine(playSound());
+            float velocity = this.GetComponent<Rigidbody>().velocity.magnitude;
+            float maxVelocity = 30f;
+
+            Sound.AutoAdjustGenerate(velocity, maxVelocity, transform.position, _soundVolume, false);
+
         }
+    }
+
+    private void PlaySound()
+    {
+        StartCoroutine(playSound());
     }
 
     private IEnumerator playSound()
     {
-        SoundManager.Instance.Play(soundName);
+        SoundManager.Instance.Play(_soundName);
 
-        yield return new WaitForSeconds(stopSeconds);
+        yield return new WaitForSeconds(_stopSeconds);
 
-        SoundManager.Instance.Stop(soundName);
+        SoundManager.Instance.Stop(_soundName);
 
         Destroy(gameObject);
     }

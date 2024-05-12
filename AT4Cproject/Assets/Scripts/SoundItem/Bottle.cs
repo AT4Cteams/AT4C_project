@@ -5,8 +5,8 @@ using UnityEngine;
 public class Bottle : MonoBehaviour
 {
     [SerializeField]
-    [Range(0, 5)]
-    private int _soundLevel;
+    [Range(0, 100)]
+    private float _soundVolume;
 
     private Rigidbody _rigidbody;
 
@@ -19,11 +19,11 @@ public class Bottle : MonoBehaviour
     {
         if (_rigidbody.velocity.magnitude < 1f) return;
 
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
-            Sound.Generate((SoundLevel)_soundLevel, transform.position);
+            Sound.Generate(_soundVolume, transform.position);
 
-            Destroy(this.gameObject, 0.1f);
+            Destroy(this.gameObject);
         }
     }
 }
