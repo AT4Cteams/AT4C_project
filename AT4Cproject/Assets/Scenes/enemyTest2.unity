@@ -1916,6 +1916,29 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &349566414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1791290215661758169, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+  m_PrefabInstance: {fileID: 855934123}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &349566421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349566414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 0}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!43 &354130285
 Mesh:
   m_ObjectHideFlags: 0
@@ -5486,7 +5509,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1791290215661758169, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 349566421}
   m_SourcePrefab: {fileID: 100100000, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
 --- !u!43 &869565898
 Mesh:
@@ -13083,9 +13109,8 @@ MonoBehaviour:
   _jumpForce: 15
   _jetForce: 10
   _shootPower: 1000
-  instantiateObject: {fileID: 2684786003189383202, guid: f75dda798f174304c878dfef11652dee, type: 3}
   grabPoint: {fileID: 5684877972657817532}
-  rayPoint: {fileID: 0}
+  _canGrabDistance: 5
 --- !u!4 &5684877972657817532
 Transform:
   m_ObjectHideFlags: 0
