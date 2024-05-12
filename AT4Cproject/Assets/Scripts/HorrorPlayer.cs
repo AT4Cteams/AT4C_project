@@ -39,6 +39,8 @@ public class HorrorPlayer : MonoBehaviour
     [Header("オブジェクトを掴める距離")]
     [SerializeField] private float _canGrabDistance = 5.0f;
 
+    private Vector3 _grabObjScale = Vector3.one;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -115,6 +117,7 @@ public class HorrorPlayer : MonoBehaviour
                     if (hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
                         grabObj = hit.collider.gameObject;
+                        _grabObjScale = grabObj.transform.localScale;
                         grabObj.GetComponent<Rigidbody>().isKinematic = true;
                         grabObj.transform.position = grabPoint.position;
                         grabObj.transform.SetParent(grabPoint.transform);
@@ -129,6 +132,7 @@ public class HorrorPlayer : MonoBehaviour
                 {
                     grabObj.GetComponent<Rigidbody>().isKinematic = false;
                     grabObj.transform.SetParent(null);
+                    grabObj.transform.localScale = _grabObjScale;
                     grabObj = null;
                 }
             }
@@ -143,6 +147,7 @@ public class HorrorPlayer : MonoBehaviour
                 {
                     grabObj.GetComponent<Rigidbody>().isKinematic = false;
                     grabObj.transform.SetParent(null);
+                    grabObj.transform.localScale = _grabObjScale;
                     grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
                     grabObj = null;
                 }
