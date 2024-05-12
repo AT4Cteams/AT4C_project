@@ -2,28 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bottle : MonoBehaviour
+public class Bottle : SoundItem
 {
+    [Header("Ç±ÇÃë¨ìxà»è„Ç≈Ç‘Ç¬Ç©ÇÈÇ∆äÑÇÍÇ‹Ç∑")]
     [SerializeField]
-    [Range(0, 100)]
-    private float _soundVolume;
+    private float _capacitySpeed = 1.0f;
 
-    private Rigidbody _rigidbody;
-
-    private void Start()
+    protected override void OnColEnter(Collision collision)
     {
-        _rigidbody = GetComponent<Rigidbody>();
-    }
+        if (_rigidbody.velocity.magnitude < _capacitySpeed) return;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_rigidbody.velocity.magnitude < 1f) return;
+        Sound.Generate(_soundVolume, transform.position);
 
-        if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
-        {
-            Sound.Generate(_soundVolume, transform.position);
+        Destroy(this.gameObject);
 
-            Destroy(this.gameObject);
-        }
+        PlaySound();
     }
 }
