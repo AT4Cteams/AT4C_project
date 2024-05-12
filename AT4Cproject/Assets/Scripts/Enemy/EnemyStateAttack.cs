@@ -14,12 +14,9 @@ using UnityEngine.Playables;
 public class EnemyStateAttack : IEnemyState
 {
     private float _exitTime = 1f;
-    private float _minTime = 0.5f;
-    private float _maxTime = 2.0f;
 
     Enemy _enemy;
 
-    public EnemyState _state => EnemyState.Idle;
     public EnemyStateAttack(Enemy enemy) => _enemy = enemy;
     public override void Entry()
     {

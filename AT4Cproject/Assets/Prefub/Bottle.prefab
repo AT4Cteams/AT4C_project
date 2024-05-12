@@ -235,6 +235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 70
+  _stopSeconds: 0
+  _soundName: 
+  _capacitySpeed: 1
+  _brokenGlass: {fileID: 4595943050666999623, guid: cbd66663ae9c1c74fa7a7009dbbcbe60, type: 3}
 --- !u!54 &7214237167759469028
 Rigidbody:
   m_ObjectHideFlags: 0

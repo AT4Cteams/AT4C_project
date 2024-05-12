@@ -70,6 +70,7 @@ abstract public class SoundItem : MonoBehaviour
 
     protected void PlaySound()
     {
+        if (_stopSeconds == 0f) return;
         StartCoroutine(playSound());
     }
 
@@ -92,7 +93,7 @@ abstract public class SoundItem : MonoBehaviour
 
         Vector3 result = Vector3.Reflect(direction, normal);
 
-        GetComponent<Rigidbody>().velocity = result;
+        GetComponent<Rigidbody>().velocity = result * 1.2f;
     }
 
     protected virtual void Broken() { Destroy(this.gameObject); }

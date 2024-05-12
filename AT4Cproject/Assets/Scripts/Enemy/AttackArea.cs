@@ -26,9 +26,7 @@ public class AttackArea : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!isHit) return;
-
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             isHit = true;
         }
@@ -36,7 +34,7 @@ public class AttackArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             isHit = false;
         }
