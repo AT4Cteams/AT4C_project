@@ -17,8 +17,6 @@ public class HorrorPlayer : MonoBehaviour
     [Header("オブジェクトの発射速度")]
     public float _shootPower = 3000;
 
-    [Header("オブジェクトの発射速度")]
-    public GameObject instantiateObject;
 
 
     [Header("ライト")]
@@ -35,11 +33,11 @@ public class HorrorPlayer : MonoBehaviour
     private bool _isJump = true;
 
     [SerializeField] private Transform grabPoint;
-    [SerializeField] private Transform rayPoint;
-    private float rayDistance = 0.2f;
     private GameObject grabObj;
     private GameObject hitObject;
 
+    [Header("オブジェクトを掴める距離")]
+    [SerializeField] private float _canGrabDistance = 5.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -80,10 +78,8 @@ public class HorrorPlayer : MonoBehaviour
         RaycastHit hit;
 
         //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)
-        if (Physics.Raycast(ray, out _hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out _hit, _canGrabDistance))
         {
-            //hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
-            //hitObject = hit.collider.gameObject;
             if (_hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && _hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
                 if (hitObject != null)
@@ -102,28 +98,19 @@ public class HorrorPlayer : MonoBehaviour
                     hitObject = null;
                 }
             }
-            //if (hitObject != null)
-            //{
-            //    if (hitObject.TryGetComponent<Outline>(out Outline component) && hitObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
-            //    {
-            //        hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
-            //        hitObject = null;
-            //    }
-            //}
         }
         else
         {
+            if(hitObject != null)hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
             hitObject = null;
         }
 
 
         if (Input.GetKeyUp(KeyCode.F))
         {
-
-
             if (grabObj == null)
             {
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                if (Physics.Raycast(ray, out hit, _canGrabDistance))
                 {
                     if (hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
@@ -131,6 +118,7 @@ public class HorrorPlayer : MonoBehaviour
                         grabObj.GetComponent<Rigidbody>().isKinematic = true;
                         grabObj.transform.position = grabPoint.position;
                         grabObj.transform.SetParent(grabPoint.transform);
+                        grabObj.transform.rotation = Quaternion.identity;
                     }
                     
                 }
@@ -141,20 +129,25 @@ public class HorrorPlayer : MonoBehaviour
                 {
                     grabObj.GetComponent<Rigidbody>().isKinematic = false;
                     grabObj.transform.SetParent(null);
+                    grabObj = null;
+                }
+            }
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(grabObj != null)
+            {
+                if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    grabObj.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObj.transform.SetParent(null);
                     grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
                     grabObj = null;
                 }
             }
-
-
         }
-
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    GameObject projectile = Instantiate(instantiateObject,transform.position,Quaternion.identity);
-        //    projectile.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
-        //}
     }
 
     private void Moving()
