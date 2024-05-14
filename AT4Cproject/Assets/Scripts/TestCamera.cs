@@ -13,7 +13,8 @@ public class TestCamera : MonoBehaviour
     [SerializeField]
     private GameObject _target;
 
-    public float _speed = 1.0f;
+    public float _mouseSpeed = 1.0f;
+    public float _controllerSpeed = 2.0f;
 
     private float _time = 0f;
 
@@ -47,15 +48,25 @@ public class TestCamera : MonoBehaviour
     }
     private void rotateCameraAngle()
     {
+
+         
+
         if (!_enabled) return;
 
         Vector3 angle = new Vector3(
-            Input.GetAxis("Mouse X") * _speed,
-            Input.GetAxis("Mouse Y") * _speed,
+            Input.GetAxis("Mouse X") * _mouseSpeed,
+            Input.GetAxis("Mouse Y") * _mouseSpeed,
             0
         );
 
+        Vector3 controllerAngle = new Vector3(
+            Input.GetAxis("Horizontal2") * _controllerSpeed,
+            Input.GetAxis("Vertical2") * _controllerSpeed,
+            0
+        );
+        
         transform.eulerAngles += new Vector3(-angle.y, angle.x);
+        transform.eulerAngles += new Vector3(controllerAngle.y, controllerAngle.x);
     }
 
     private IEnumerator GameStartMove()

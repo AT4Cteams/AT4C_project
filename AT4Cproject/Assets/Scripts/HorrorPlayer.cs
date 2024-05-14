@@ -60,7 +60,7 @@ public class HorrorPlayer : MonoBehaviour
         Moving();
 
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
         {
             Jump();
         }
@@ -70,7 +70,7 @@ public class HorrorPlayer : MonoBehaviour
             Jet();
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyDown("joystick button 9"))
         {
             UseLight();
         }
@@ -108,20 +108,21 @@ public class HorrorPlayer : MonoBehaviour
         }
 
 
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyDown("joystick button 4") || Input.GetKeyDown("joystick button 5"))
         {
             if (grabObj == null)
             {
                 if (Physics.Raycast(ray, out hit, _canGrabDistance))
                 {
-                    if (hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
                         grabObj = hit.collider.gameObject;
-                        _grabObjScale = grabObj.transform.localScale;
                         grabObj.GetComponent<Rigidbody>().isKinematic = true;
+                        _grabObjScale = grabObj.transform.localScale;
                         grabObj.transform.position = grabPoint.position;
+                        grabObj.transform.localRotation = Quaternion.identity;
                         grabObj.transform.SetParent(grabPoint.transform);
-                        grabObj.transform.rotation = Quaternion.identity;
+                        grabObj.transform.localRotation = Quaternion.identity;
                     }
                     
                 }
@@ -138,8 +139,9 @@ public class HorrorPlayer : MonoBehaviour
             }
         }
 
+        float tri = Input.GetAxis("LT RT");
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || tri != 0)
         {
             if(grabObj != null)
             {
@@ -165,7 +167,7 @@ public class HorrorPlayer : MonoBehaviour
         Vector3 vel = _horizontalRotation * new Vector3(_horizontal, 0f, _vertical);
         vel.y = _rigidbody.velocity.y;
 
-        _aim = _horizontalRotation * new Vector3(_horizontal, 0, _vertical).normalized;
+        //_aim = _horizontalRotation * new Vector3(_horizontal, 0, _vertical).normalized;
 
         _transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
 

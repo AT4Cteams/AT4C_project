@@ -6456,7 +6456,8 @@ MonoBehaviour:
   _offsetHeight: 1.5
   _offsetForward: 0
   _target: {fileID: 4487981517404805304}
-  _speed: 1
+  _mouseSpeed: 1
+  _controllerSpeed: 1.5
 --- !u!4 &1037977981 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3465044834727972344, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
