@@ -37,6 +37,8 @@ public class Sound : MonoBehaviour
     private MeshRenderer _mesh;
     private UnityEngine.Color _color;
     private float _alpha;
+    private bool _isVisible = true;
+    private bool _footSoundMode = false;
 
     public bool isHit { get; set; }
     public float volume { get { return _volume; }}
@@ -50,6 +52,9 @@ public class Sound : MonoBehaviour
         _mesh = _areaObject.GetComponent<MeshRenderer>();
         _color = _mesh.material.color;
         _alpha = _color.a;
+
+        if(!_isVisible)
+            _mesh.material.color = new UnityEngine.Color(0f, 0f, 0f, 0f);
     }
 
     void Update()
@@ -95,15 +100,29 @@ public class Sound : MonoBehaviour
         return newSound;
     }
 
-    public static void AutoAdjustGenerate(float currentValue, float maxValue, Vector3 position, float maxSoundVolume, bool show)
+    public static void AutoAdjustGenerate(float currentValue, float maxValue, Vector3 position, float maxSoundVolume, bool visible)
     {
         GameObject newSound = AutoAdjustGenerate(currentValue, maxValue, position, maxSoundVolume);
-        newSound.GetComponent<MeshRenderer>().enabled = show;
+        if(!visible)
+            newSound.GetComponent<Sound>().NoVisible();
+    }
+
+    public static void AutoAdjustGenerate(float currentValue, float maxValue, Vector3 position, float maxSoundVolume, bool visible, bool footSoundMode)
+    {
+        GameObject newSound = AutoAdjustGenerate(currentValue, maxValue, position, maxSoundVolume);
+        if(!visible)
+            newSound.GetComponent<Sound>().NoVisible();
+        newSound.GetComponent<Sound>()._footSoundMode = footSoundMode;
+
     }
 
     private void Expention()
     {
         Vector3 targetScale = new Vector3(_maxVolume, _maxVolume, _maxVolume);
+        if (_footSoundMode)
+        {
+            targetScale = new Vector3(_maxVolume, 0.01f, _maxVolume);
+        }
 
         float elapsed = Time.time - _startTime;
         float t = Mathf.Clamp01(elapsed / _finishTime);
@@ -116,13 +135,28 @@ public class Sound : MonoBehaviour
 
         _volume = _maxVolume * (1f - t);
 
-        float alpha = _alpha * (1f - t);
-        _mesh.material.color = new UnityEngine.Color(_color.r, _color.g, _color.b, alpha);
+        if(_isVisible)
+        {
+            float alpha = _alpha * (1f - t);
+            if (!_footSoundMode)
+            {
+                _mesh.material.color = new UnityEngine.Color(_color.r, _color.g, _color.b, alpha);
+            }
+            else
+            {
+                _mesh.material.color = new UnityEngine.Color(_color.r, _color.g, _color.b, alpha / 5);
+            }
+        }
     }
 
     private void SetVolume(float value)
     {
         _volume = value;
         _maxVolume = _volume;
+    }
+
+    private void NoVisible()
+    {
+        _isVisible = false;
     }
 }

@@ -165,6 +165,10 @@ MonoBehaviour:
   _shootPower: 1000
   grabPoint: {fileID: 0}
   _canGrabDistance: 5
+  _footSoundVolume: 50
+  _doorOpenSoundVolume: 75
+  _footSoundDeadValue: 0.3
+  _bodyModel: {fileID: 1227456432799078221}
 --- !u!136 &7652475767125137288
 CapsuleCollider:
   m_ObjectHideFlags: 0

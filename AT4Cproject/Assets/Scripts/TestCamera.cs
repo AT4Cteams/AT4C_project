@@ -98,14 +98,14 @@ public class TestCamera : MonoBehaviour
     private IEnumerator GameOverMove()
     {
         Vector3 startAngle = transform.localEulerAngles;
-        Vector3 targetAngle = new Vector3(70f, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        Vector3 targetAngle = new Vector3(90f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
         Color startColor = new Color(0, 0, 0, 0);
         Color targetColor = new Color(0, 0, 0, 1);
 
         while (_time < 1.0f)
         {
-            _time += Time.deltaTime * 1.5f;
+            _time += Time.deltaTime * 1.2f;
 
             transform.localEulerAngles = Vector3.Slerp(startAngle, targetAngle, _time);
 
