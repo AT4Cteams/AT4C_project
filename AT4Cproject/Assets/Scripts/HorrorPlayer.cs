@@ -41,6 +41,8 @@ public class HorrorPlayer : MonoBehaviour
 
     private Vector3 _grabObjScale = Vector3.one;
 
+    private bool _isGrabNob;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,22 +59,26 @@ public class HorrorPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Moving();
-
-
-        if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
+        if (!_isGrabNob)
         {
-            Jump();
-        }
+            Moving();
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            Jet();
-        }
 
-        if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyDown("joystick button 9"))
-        {
-            UseLight();
+            if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
+            {
+                Jump();
+            }
+
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                Jet();
+            }
+
+            if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyDown("joystick button 9"))
+            {
+                UseLight();
+            }
         }
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -90,7 +96,7 @@ public class HorrorPlayer : MonoBehaviour
                     hitObject = null;
                 }
                 hitObject = _hit.collider.gameObject;
-                hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 255);
+                hitObject.GetComponent<Outline>().OutlineColor = Color.cyan;
             }
             else
             {
@@ -108,7 +114,7 @@ public class HorrorPlayer : MonoBehaviour
         }
 
 
-        if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyDown("joystick button 4") || Input.GetKeyDown("joystick button 5"))
+        if (Input.GetKey(KeyCode.F) || Input.GetKey("joystick button 4") || Input.GetKey("joystick button 5"))
         {
             if (grabObj == null)
             {
@@ -116,18 +122,24 @@ public class HorrorPlayer : MonoBehaviour
                 {
                     if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
+                        if(hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        {
+                            grabObj = hit.collider.gameObject;
+                            _isGrabNob = true;
+                            return;
+
+                        }
                         grabObj = hit.collider.gameObject;
                         grabObj.GetComponent<Rigidbody>().isKinematic = true;
                         _grabObjScale = grabObj.transform.localScale;
                         grabObj.transform.position = grabPoint.position;
-                        grabObj.transform.localRotation = Quaternion.identity;
                         grabObj.transform.SetParent(grabPoint.transform);
                         grabObj.transform.localRotation = Quaternion.identity;
                     }
                     
                 }
             }
-            else
+            else if(Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown("joystick button 4") || Input.GetKeyDown("joystick button 5"))
             {
                 if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
                 {
@@ -135,8 +147,19 @@ public class HorrorPlayer : MonoBehaviour
                     grabObj.transform.SetParent(null);
                     grabObj.transform.localScale = _grabObjScale;
                     grabObj = null;
+                    _isGrabNob = false;
                 }
             }
+            else
+            {
+                if(grabObj.CompareTag("doornob")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                else if(grabObj.CompareTag("doornob2")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
+            }
+        }
+        else if(grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2"))
+        {
+            grabObj = null;
+            _isGrabNob = false;
         }
 
         float tri = Input.GetAxis("LT RT");
