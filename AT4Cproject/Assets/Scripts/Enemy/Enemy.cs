@@ -135,6 +135,15 @@ public class Enemy : MonoBehaviour
         if (_attackArea.isHit)
         {
             Debug.Log("UŒ‚‚ª“–‚½‚Á‚½‚æI");
+
+            if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
+            if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
+
+            Camera.main.GetComponent<TestCamera>().GameOver();
+
+            Vector3 pos = Camera.main.transform.position + (Camera.main.transform.forward * 0.5f);
+
+            Instantiate(_attackEffect, pos, Quaternion.Euler(90f, 0f, 0f));
         }
         else
         {
