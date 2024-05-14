@@ -18,9 +18,18 @@ public class DoorLock : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent<Key>(out Key key))
+        //if(collision.gameObject.TryGetComponent<Key>(out Key key))
+        //{
+        //    Destroy(this.gameObject);
+        //}
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.TryGetComponent<Key>(out Key key)) 
         {
             Destroy(this.gameObject);
+            Destroy(other.gameObject);
         }
     }
 }
