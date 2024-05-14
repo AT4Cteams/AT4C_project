@@ -51,7 +51,7 @@ public class TestCamera : MonoBehaviour
 
          
 
-        if (!_enabled) return;
+        //if (!_enabled) return;
 
         Vector3 angle = new Vector3(
             Input.GetAxis("Mouse X") * _mouseSpeed,
