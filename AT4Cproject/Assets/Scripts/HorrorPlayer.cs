@@ -156,7 +156,7 @@ public class HorrorPlayer : MonoBehaviour
                 else if(grabObj.CompareTag("doornob2")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
             }
         }
-        else if(grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2"))
+        else if(grabObj != null && (grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2")))
         {
             grabObj = null;
             _isGrabNob = false;
