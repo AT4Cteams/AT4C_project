@@ -25,10 +25,9 @@ public class SoundMeasure : MonoBehaviour
     {
         if(_prevSoundValue == _soundValue)
         {
-            //_time += Time.deltaTime;
-            _time += 1f;
+            _time += Time.deltaTime;
 
-            if( _time > _maxTime )
+            if ( _time > _maxTime )
             {
                 _prevSoundValue = 0f;
                 _soundValue = 0f;
