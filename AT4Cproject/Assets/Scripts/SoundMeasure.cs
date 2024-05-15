@@ -23,7 +23,9 @@ public class SoundMeasure : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_prevSoundValue == _soundValue)
+        _prevSoundValue = _soundValue;
+
+        if (_prevSoundValue == _soundValue)
         {
             _time += Time.deltaTime;
 
@@ -45,14 +47,13 @@ public class SoundMeasure : MonoBehaviour
         // âπÇÃä¥ímèàóù
         if (other.gameObject.TryGetComponent<Sound>(out Sound sound))
         {
-            if (sound.isHit) return;
+            //if (sound.isHit) return;
 
             float nextVolume = sound.volume;
 
-            if(_prevSoundValue < nextVolume)
+            if(_soundValue < nextVolume)
             {
                 _soundValue = nextVolume;
-                _prevSoundValue = _soundValue;
             }
 
 
