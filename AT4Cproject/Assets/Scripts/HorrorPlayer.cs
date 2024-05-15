@@ -32,17 +32,21 @@ public class HorrorPlayer : MonoBehaviour
 
     private bool _isJump = true;
 
-    [SerializeField] private Transform grabPoint;
-    private GameObject grabObj;
+    [SerializeField] private Transform rightHand;
+    [SerializeField] private Transform leftHand;
+    private GameObject grabObjL;
+    private GameObject grabObjR;
     private GameObject hitObject;
 
     [Header("オブジェクトを掴める距離")]
     [SerializeField] private float _canGrabDistance = 5.0f;
 
-    private Vector3 _grabObjScale = Vector3.one;
+    private Vector3 _grabObjLScale = Vector3.one;
+    private Vector3 _grabObjRScale = Vector3.one;
 
     private bool _isGrabNob;
 
+    [SerializeField] private bool _visibleSoundWave = false;
     [SerializeField]
     [Range(0f, 100f)]
     private float _footSoundVolume;
@@ -112,7 +116,7 @@ public class HorrorPlayer : MonoBehaviour
                     hitObject = null;
                 }
                 hitObject = _hit.collider.gameObject;
-                hitObject.GetComponent<Outline>().OutlineColor = Color.cyan;
+                hitObject.GetComponent<Outline>().OutlineColor = Color.green;
             }
             else
             {
@@ -125,85 +129,178 @@ public class HorrorPlayer : MonoBehaviour
         }
         else
         {
-            if(hitObject != null)hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+            if (hitObject != null) hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
             hitObject = null;
         }
 
 
-        if (Input.GetKey(KeyCode.F) || Input.GetKey("joystick button 4") || Input.GetKey("joystick button 5"))
+
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey("joystick button 4"))
         {
-            if (grabObj == null)
+            if (grabObjL == null)
             {
                 if (Physics.Raycast(ray, out hit, _canGrabDistance))
                 {
                     if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
-                        if(hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        if (hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
                         {
-                            grabObj = hit.collider.gameObject;
+                            grabObjL = hit.collider.gameObject;
                             _isGrabNob = true;
                             return;
 
                         }
-                        grabObj = hit.collider.gameObject;
-                        grabObj.GetComponent<Rigidbody>().isKinematic = true;
-                        _grabObjScale = grabObj.transform.localScale;
-                        grabObj.transform.position = grabPoint.position;
-                        grabObj.transform.SetParent(grabPoint.transform);
-                        grabObj.transform.localRotation = Quaternion.identity;
+                        grabObjL = hit.collider.gameObject;
+                        grabObjL.GetComponent<Rigidbody>().isKinematic = true;
+                        _grabObjLScale = grabObjL.transform.localScale;
+                        grabObjL.transform.position = leftHand.position;
+                        grabObjL.transform.SetParent(leftHand.transform);
+                        grabObjL.transform.localRotation = Quaternion.identity;
                     }
-                    
+
                 }
             }
-            else if(Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown("joystick button 4") || Input.GetKeyDown("joystick button 5"))
+            else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))
             {
-                if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                if (grabObjL.TryGetComponent<Rigidbody>(out Rigidbody rb))
                 {
-                    grabObj.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObj.transform.SetParent(null);
-                    grabObj.transform.localScale = _grabObjScale;
-                    grabObj = null;
+                    grabObjL.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObjL.transform.SetParent(null);
+                    grabObjL.transform.localScale = _grabObjLScale;
+                    grabObjL = null;
                     _isGrabNob = false;
                 }
             }
             else
             {
                 // ドア開閉
-                if(grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2"))
+                if (grabObjL.CompareTag("doornob") || grabObjL.CompareTag("doornob2"))
                 {
-                    if (grabObj.CompareTag("doornob")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
-                    else if (grabObj.CompareTag("doornob2")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
+                    if (grabObjL.CompareTag("doornob")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                    else if (grabObjL.CompareTag("doornob2")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
 
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
-                    if(soundVolume > 0.3f)
-                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObj.transform.position, _doorOpenSoundVolume);
+                    if (soundVolume > 0.3f)
+                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjL.transform.position, _doorOpenSoundVolume,_visibleSoundWave);
                 }
             }
         }
-        else if(grabObj != null && (grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2")))
+        else if (grabObjL != null && (grabObjL.CompareTag("doornob") || grabObjL.CompareTag("doornob2")))
         {
-            grabObj = null;
+            grabObjL = null;
             _isGrabNob = false;
         }
 
         float tri = Input.GetAxis("LT RT");
 
-        if (Input.GetMouseButtonDown(0) || tri != 0)
+        if (Input.GetMouseButtonDown(0) || tri < 0)
         {
-            if(grabObj != null)
+            if (grabObjL != null && !grabObjL.CompareTag("doornob") && !grabObjL.CompareTag("doornob2") && !grabObjL.CompareTag("candle"))
             {
-                if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                if (grabObjL.TryGetComponent<Rigidbody>(out Rigidbody rb))
                 {
-                    grabObj.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObj.transform.SetParent(null);
-                    grabObj.transform.localScale = _grabObjScale;
-                    grabObj.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
-                    grabObj = null;
+                    grabObjL.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObjL.transform.SetParent(null);
+                    grabObjL.transform.localScale = _grabObjLScale;
+                    grabObjL.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+                    grabObjL = null;
                 }
             }
         }
-    }
+        else if (Input.GetMouseButtonDown(1) || tri > 0)
+        {
+            if (grabObjR != null && !grabObjR.CompareTag("doornob") && !grabObjR.CompareTag("doornob2") && !grabObjR.CompareTag("candle"))
+            {
+                if (grabObjR.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    grabObjR.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObjR.transform.SetParent(null);
+                    grabObjR.transform.localScale = _grabObjLScale;
+                    grabObjR.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+                    grabObjR = null;
+                }
+            }
+        }
+
+
+        if (Input.GetKey(KeyCode.E) || Input.GetKey("joystick button 5"))
+        {
+            if (grabObjR == null)
+            {
+                if (Physics.Raycast(ray, out hit, _canGrabDistance))
+                {
+                    if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    {
+                        if (hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        {
+                            grabObjR = hit.collider.gameObject;
+                            _isGrabNob = true;
+                            return;
+
+                        }
+                        grabObjR = hit.collider.gameObject;
+                        grabObjR.GetComponent<Rigidbody>().isKinematic = true;
+                        _grabObjRScale = grabObjR.transform.localScale;
+                        grabObjR.transform.position = rightHand.position;
+                        grabObjR.transform.SetParent(rightHand.transform);
+                        grabObjR.transform.localRotation = Quaternion.identity;
+                    }
+
+                }
+            }
+            else if (Input.GetKey(KeyCode.E) || Input.GetKeyDown("joystick button 5"))
+            {
+                if (grabObjR.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    grabObjR.GetComponent<Rigidbody>().isKinematic = false;
+                    grabObjR.transform.SetParent(null);
+                    grabObjR.transform.localScale = _grabObjRScale;
+                    grabObjR = null;
+                    _isGrabNob = false;
+                }
+            }
+            else
+            {
+                // ドア開閉
+                if (grabObjR.CompareTag("doornob") || grabObjR.CompareTag("doornob2"))
+                {
+                    if (grabObjR.CompareTag("doornob")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                    else if (grabObjR.CompareTag("doornob2")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
+
+                    // ドアの開閉音
+                    float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
+                    if (soundVolume > 0.3f)
+                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjR.transform.position, _doorOpenSoundVolume,_visibleSoundWave);
+                }
+            }
+        }
+        else if (grabObjR != null && (grabObjR.CompareTag("doornob") || grabObjR.CompareTag("doornob2")))
+        {
+            grabObjR = null;
+            _isGrabNob = false;
+        }
+
+
+
+
+
+}
+
+
+
+   
+    ///////////////////////////////////////////////////////////////////
+   
+
+
+
+    
+    ///////////////////////////////////////////////////////
+   
+
+
+
 
     private void Moving()
     {
@@ -224,7 +321,7 @@ public class HorrorPlayer : MonoBehaviour
         // 足音
         float soundVolume = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
         if(Mathf.Abs(horizontal) > _footSoundDeadValue || Mathf.Abs(vertical) > _footSoundDeadValue)
-            Sound.AutoAdjustGenerate(soundVolume, 2f, transform.position, _footSoundVolume, true, true);
+            Sound.AutoAdjustGenerate(soundVolume, 2f, transform.position, _footSoundVolume, _visibleSoundWave);
     }
 
     private void Jump()
