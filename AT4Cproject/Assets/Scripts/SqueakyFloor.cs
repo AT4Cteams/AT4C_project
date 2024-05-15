@@ -12,32 +12,6 @@ public class SquakyFloor : MonoBehaviour
         rbPlayer = player.GetComponent<Rigidbody>();
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // プレイヤーの移動速度によってきしむ音量が変化
-            float playerMag = rbPlayer.velocity.magnitude;
-            if (playerMag >= 1)
-            {
-                Sound.Generate(SoundLevel.lv5, other.transform.position);
-            }
-        }
-    }
-
-    private void OnCollisionStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // プレイヤーの移動速度によってきしむ音量が変化
-            float playerMag = rbPlayer.velocity.magnitude;
-            if (playerMag >= 1)
-            {
-                Sound.Generate(SoundLevel.lv5, other.transform.position);
-            }
-        }
-    }
-
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
