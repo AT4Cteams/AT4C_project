@@ -10,6 +10,8 @@ TagManager:
   - Floor
   - GetItem
   - Wall
+  - doornob
+  - doornob2
   layers:
   - Default
   - TransparentFX

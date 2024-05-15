@@ -41,6 +41,21 @@ public class HorrorPlayer : MonoBehaviour
 
     private Vector3 _grabObjScale = Vector3.one;
 
+    private bool _isGrabNob;
+
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float _footSoundVolume;
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float _doorOpenSoundVolume;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float _footSoundDeadValue;
+
+    [SerializeField]
+    private MeshRenderer _bodyModel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,27 +67,34 @@ public class HorrorPlayer : MonoBehaviour
         _playerRotation = _transform.rotation;
 
         _light = GameObject.Find("FlashLight");
+
+        //_bodyModel.material.color = new UnityEngine.Color(0f, 0f, 0f, 0f);
+        _bodyModel.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Moving();
-
-
-        if (Input.GetKey(KeyCode.Space))
+        if (!_isGrabNob)
         {
-            Jump();
-        }
+            Moving();
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            Jet();
-        }
 
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            UseLight();
+            if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
+            {
+                Jump();
+            }
+
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                Jet();
+            }
+
+            //if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyDown("joystick button 9"))
+            //{
+            //    UseLight();
+            //}
         }
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -90,7 +112,7 @@ public class HorrorPlayer : MonoBehaviour
                     hitObject = null;
                 }
                 hitObject = _hit.collider.gameObject;
-                hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 255);
+                hitObject.GetComponent<Outline>().OutlineColor = Color.cyan;
             }
             else
             {
@@ -108,25 +130,32 @@ public class HorrorPlayer : MonoBehaviour
         }
 
 
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKey(KeyCode.F) || Input.GetKey("joystick button 4") || Input.GetKey("joystick button 5"))
         {
             if (grabObj == null)
             {
                 if (Physics.Raycast(ray, out hit, _canGrabDistance))
                 {
-                    if (hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
                     {
+                        if(hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        {
+                            grabObj = hit.collider.gameObject;
+                            _isGrabNob = true;
+                            return;
+
+                        }
                         grabObj = hit.collider.gameObject;
-                        _grabObjScale = grabObj.transform.localScale;
                         grabObj.GetComponent<Rigidbody>().isKinematic = true;
+                        _grabObjScale = grabObj.transform.localScale;
                         grabObj.transform.position = grabPoint.position;
                         grabObj.transform.SetParent(grabPoint.transform);
-                        grabObj.transform.rotation = Quaternion.identity;
+                        grabObj.transform.localRotation = Quaternion.identity;
                     }
                     
                 }
             }
-            else
+            else if(Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown("joystick button 4") || Input.GetKeyDown("joystick button 5"))
             {
                 if (grabObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
                 {
@@ -134,12 +163,33 @@ public class HorrorPlayer : MonoBehaviour
                     grabObj.transform.SetParent(null);
                     grabObj.transform.localScale = _grabObjScale;
                     grabObj = null;
+                    _isGrabNob = false;
+                }
+            }
+            else
+            {
+                // ドア開閉
+                if(grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2"))
+                {
+                    if (grabObj.CompareTag("doornob")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                    else if (grabObj.CompareTag("doornob2")) grabObj.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
+
+                    // ドアの開閉音
+                    float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
+                    if(soundVolume > 0.3f)
+                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObj.transform.position, _doorOpenSoundVolume);
                 }
             }
         }
+        else if(grabObj != null && (grabObj.CompareTag("doornob") || grabObj.CompareTag("doornob2")))
+        {
+            grabObj = null;
+            _isGrabNob = false;
+        }
 
+        float tri = Input.GetAxis("LT RT");
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || tri != 0)
         {
             if(grabObj != null)
             {
@@ -157,19 +207,24 @@ public class HorrorPlayer : MonoBehaviour
 
     private void Moving()
     {
-        float _horizontal = Input.GetAxis("Horizontal");
-        float _vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-        var _horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up).normalized;
+        var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up).normalized;
 
-        Vector3 vel = _horizontalRotation * new Vector3(_horizontal, 0f, _vertical);
+        Vector3 vel = horizontalRotation * new Vector3(horizontal, 0f, vertical);
         vel.y = _rigidbody.velocity.y;
 
-        _aim = _horizontalRotation * new Vector3(_horizontal, 0, _vertical).normalized;
+        //_aim = _horizontalRotation * new Vector3(_horizontal, 0, _vertical).normalized;
 
         _transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
 
         _rigidbody.velocity = new Vector3(vel.x * _speed, vel.y, vel.z * _speed);
+
+        // 足音
+        float soundVolume = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+        if(Mathf.Abs(horizontal) > _footSoundDeadValue || Mathf.Abs(vertical) > _footSoundDeadValue)
+            Sound.AutoAdjustGenerate(soundVolume, 2f, transform.position, _footSoundVolume, true, true);
     }
 
     private void Jump()
@@ -188,14 +243,14 @@ public class HorrorPlayer : MonoBehaviour
         v = v.normalized;
 
         _rigidbody.AddForce(v * _jetForce, ForceMode.Impulse);
-        Sound.Generate(SoundLevel.lv3, transform.position);
+        //Sound.Generate(SoundLevel.lv3, transform.position);
     }
 
-    private void UseLight()
-    {
-        _isLightOn = (_isLightOn) ? false : true;
-        _light.SetActive(_isLightOn);
-    }
+    //private void UseLight()
+    //{
+    //    _isLightOn = (_isLightOn) ? false : true;
+    //    _light.SetActive(_isLightOn);
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {

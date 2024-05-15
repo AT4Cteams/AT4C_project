@@ -101,7 +101,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -202,7 +202,8 @@ MonoBehaviour:
   _offsetHeight: 1.5
   _offsetForward: 0
   _target: {fileID: 0}
-  _speed: 1
+  _mouseSpeed: 1
+  _controllerSpeed: 2
   _blackBack: {fileID: 0}
 --- !u!1001 &382571586342792507
 PrefabInstance:
