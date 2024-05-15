@@ -95,10 +95,6 @@ public class HorrorPlayer : MonoBehaviour
                 Jet();
             }
 
-            //if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyDown("joystick button 9"))
-            //{
-            //    UseLight();
-            //}
         }
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -216,7 +212,7 @@ public class HorrorPlayer : MonoBehaviour
                 {
                     grabObjR.GetComponent<Rigidbody>().isKinematic = false;
                     grabObjR.transform.SetParent(null);
-                    grabObjR.transform.localScale = _grabObjLScale;
+                    grabObjR.transform.localScale = _grabObjRScale;
                     grabObjR.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
                     grabObjR = null;
                 }
@@ -224,7 +220,7 @@ public class HorrorPlayer : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.E) || Input.GetKey("joystick button 5"))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKey("joystick button 5"))
         {
             if (grabObjR == null)
             {
