@@ -10,6 +10,8 @@ public class SoundManager : MonoBehaviour
         public AudioClip audioClip;
         public float playedTime;    //前回再生した時間
         public AudioSource audioSource; //再生中の AudioSource
+        public float minDistance = 1f; // 最小距離
+        public float maxDistance = 50f; // 最大距離
     }
 
     [SerializeField]
@@ -31,6 +33,7 @@ public class SoundManager : MonoBehaviour
         private set;
         get;
     }
+
     private void Awake()
     {
         if (Instance == null)
@@ -47,6 +50,7 @@ public class SoundManager : MonoBehaviour
         for (var i = 0; i < audioSourceList.Length; ++i)
         {
             audioSourceList[i] = gameObject.AddComponent<AudioSource>();
+            audioSourceList[i].spatialBlend = 1.0f; // 3Dサウンドにする
         }
 
         //soundDictionaryにセット
@@ -68,23 +72,25 @@ public class SoundManager : MonoBehaviour
     }
 
     //指定されたAudioClipを未使用のAudioSourceで再生
-    public void Play(AudioClip clip)
+    private void Play(AudioClip clip, Vector3 position, float minDistance, float maxDistance)
     {
         var audioSource = GetUnusedAudioSource();
         if (audioSource == null) return; //再生できませんでした
         audioSource.clip = clip;
+        audioSource.transform.position = position; // 音源の位置を設定
+        audioSource.minDistance = minDistance; // 最小距離を設定
+        audioSource.maxDistance = maxDistance; // 最大距離を設定
         audioSource.Play();
     }
 
-
     //指定された別名で登録されたAudioClipを再生
-    public void Play(string name)
+    public void Play(string name, Vector3 position)
     {
         if (soundDictionary.TryGetValue(name, out var soundData)) //管理用Dictionary から、別名で探索
         {
             if (Time.realtimeSinceStartup - soundData.playedTime < playableDistance) return;    //まだ再生するには早い
             soundData.playedTime = Time.realtimeSinceStartup;//次回用に今回の再生時間の保持
-            Play(soundData.audioClip); //見つかったら、再生
+            Play(soundData.audioClip, position, soundData.minDistance, soundData.maxDistance); //見つかったら、再生
         }
         else
         {
@@ -120,5 +126,4 @@ public class SoundManager : MonoBehaviour
             Debug.LogWarning($"サウンド「{name}」が登録されていません");
         }
     }
-
 }
