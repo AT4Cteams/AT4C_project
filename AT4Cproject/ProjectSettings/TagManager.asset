@@ -12,6 +12,7 @@ TagManager:
   - Wall
   - doornob
   - doornob2
+  - candle
   layers:
   - Default
   - TransparentFX
