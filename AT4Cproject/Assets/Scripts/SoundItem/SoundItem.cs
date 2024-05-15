@@ -76,7 +76,7 @@ abstract public class SoundItem : MonoBehaviour
 
     private IEnumerator playSound()
     {
-        SoundManager.Instance.Play(_soundName);
+        SoundManager.Instance.Play(_soundName,this.transform.position);
 
         yield return new WaitForSeconds(_stopSeconds);
 
