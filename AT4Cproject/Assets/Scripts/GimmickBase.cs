@@ -3,11 +3,6 @@ using UnityEngine;
 abstract public class GimmickBase : MonoBehaviour
 {
     [SerializeField] [Tag] protected string[] _collisionTagName;
-    [SerializeField] protected LayerMask _groundLayer;
-    [SerializeField] protected Vector2 _raySize;
-    [SerializeField] protected float groundCheckOffsetY;
-    [SerializeField] protected bool _noRotationLock;
-
 
 
     void OnCollisionEnter(Collision collision)
