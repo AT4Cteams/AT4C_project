@@ -63,14 +63,21 @@ public class EnemyStateTracking : IEnemyState
 
         // 目標位置に到達したかどうかを確認
         if (!_isArrived && _enemy.agent.remainingDistance <= _enemy.agent.stoppingDistance)
-        { 
-            Debug.Log("とうちゃく！");
+        {
+            if (angle < 20f)
+            {
+                Debug.Log("とうちゃく！");
 
-            _isArrived = true;
+                _isArrived = true;
 
-            _enemy.targetVolume = 0f;
+                _enemy.targetVolume = 0f;
 
-            _enemy.ChangeState(EnemyState.Attack);
+                _enemy.ChangeState(EnemyState.Attack);
+            }
+            else
+            {
+                _enemy.transform.rotation = Quaternion.RotateTowards(_enemy.transform.rotation, targetRotation, _enemy.angularSpeed * Time.deltaTime);
+            }
         }
     }
 }
