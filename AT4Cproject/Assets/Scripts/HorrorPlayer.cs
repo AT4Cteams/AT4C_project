@@ -60,6 +60,9 @@ public class HorrorPlayer : MonoBehaviour
     [SerializeField]
     private MeshRenderer _bodyModel;
 
+    private float _doorAngleL;
+    private float _doorAngleR;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -172,9 +175,12 @@ public class HorrorPlayer : MonoBehaviour
                 // ドア開閉
                 if (grabObjL.CompareTag("doornob") || grabObjL.CompareTag("doornob2"))
                 {
+                   // var q = Quaternion.Euler(0, -45, 0);
+
                     if (grabObjL.CompareTag("doornob")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
                     else if (grabObjL.CompareTag("doornob2")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
 
+                   
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
                     if (soundVolume > 0.3f)
@@ -261,9 +267,14 @@ public class HorrorPlayer : MonoBehaviour
                 // ドア開閉
                 if (grabObjR.CompareTag("doornob") || grabObjR.CompareTag("doornob2"))
                 {
+                    //var q = Quaternion.Euler(0, -45, 0);
+                    
+                    _doorAngleR = grabObjR.transform.root.gameObject.transform.eulerAngles.y;
+                    
                     if (grabObjR.CompareTag("doornob")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
                     else if (grabObjR.CompareTag("doornob2")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
 
+                    
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
                     if (soundVolume > 0.3f)
