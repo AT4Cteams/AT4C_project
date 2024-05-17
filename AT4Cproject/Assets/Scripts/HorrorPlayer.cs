@@ -75,45 +75,46 @@ public class HorrorPlayer : MonoBehaviour
 
         _light = GameObject.Find("FlashLight");
 
-        //_bodyModel.material.color = new UnityEngine.Color(0f, 0f, 0f, 0f);
         _bodyModel.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_isGrabNob)
+        if (!_isGrabNob)//ドアノブを掴んでいない時
         {
-            Moving();
+            Moving();//移動の処理
 
-
-            if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))//spaceかAボタンが押されたら
             {
-                Jump();
+                Jump();//ジャンプする関数
             }
 
-
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift))//左Shiftが押されたら
             {
-                Jet();
+                Jet(); //ダッシュする関数
             }
 
         }
+
+
+
+        //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)====================================
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         RaycastHit _hit;
         RaycastHit hit;
 
-        //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)
         if (Physics.Raycast(ray, out _hit, _canGrabDistance))
         {
-            if (_hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && _hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            if (isCanGrabObject(_hit.collider.gameObject))
             {
                 if (hitObject != null)
                 {
-                    hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+                    hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
                     hitObject = null;
                 }
+
                 hitObject = _hit.collider.gameObject;
                 hitObject.GetComponent<Outline>().OutlineColor = Color.green;
             }
@@ -121,65 +122,57 @@ public class HorrorPlayer : MonoBehaviour
             {
                 if (hitObject != null)
                 {
-                    hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+                    hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
                     hitObject = null;
                 }
             }
         }
         else
         {
-            if (hitObject != null) hitObject.GetComponent<Outline>().OutlineColor = new Color(0, 255, 255, 0);
+            if (hitObject != null) hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
             hitObject = null;
         }
+        //============================================================================================================
 
 
 
-        if (Input.GetKey(KeyCode.Q) || Input.GetKey("joystick button 4"))
+        //左手で物を掴む、離す処理======================================================================================
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey("joystick button 4"))//QかL1が押されたら
         {
-            if (grabObjL == null)
+            if (grabObjL == null)//左手に何も持っていない時
             {
-                if (Physics.Raycast(ray, out hit, _canGrabDistance))
+                if (Physics.Raycast(ray, out hit, _canGrabDistance))//Rayを飛ばしてオブジェクトがあるかチェック
                 {
-                    if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    if (isCanGrabObject(hit.collider.gameObject))//hitしたオブジェクトが拾えるオブジェクトかチェック
                     {
-                        if (hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        grabObjL = hit.collider.gameObject;//当たったオブジェクトをgrabObjLに格納
+
+                        if (isNob(hit.collider.gameObject))//ドアノブだった場合
                         {
-                            grabObjL = hit.collider.gameObject;
-                            _isGrabNob = true;
+                            _isGrabNob = true;//ドアノブ掴んでるboolをtrueに
                             return;
-
                         }
-                        grabObjL = hit.collider.gameObject;
-                        grabObjL.GetComponent<Rigidbody>().isKinematic = true;
-                        _grabObjLScale = grabObjL.transform.localScale;
-                        grabObjL.transform.position = leftHand.position;
-                        grabObjL.transform.SetParent(leftHand.transform);
-                        grabObjL.transform.localRotation = Quaternion.identity;
+                        else //ドアノブ以外だった場合
+                        {
+                            Grab(grabObjL, leftHand);//掴む関数を呼び出す
+                        }
                     }
-
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))
+            else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//既に物を持っているとき、もう一度QかL1が押されたら
             {
-                if (grabObjL.TryGetComponent<Rigidbody>(out Rigidbody rb))
-                {
-                    grabObjL.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObjL.transform.SetParent(null);
-                    grabObjL.transform.localScale = _grabObjLScale;
-                    grabObjL = null;
-                    _isGrabNob = false;
-                }
+                Release(grabObjL, _grabObjLScale);//物を手放す関数を呼び出す
+                grabObjL = null;//掴んでいるオブジェクトをnullに
             }
-            else
+            else //何かを左手に持っているとき
             {
-                // ドア開閉
-                if (grabObjL.CompareTag("doornob") || grabObjL.CompareTag("doornob2"))
+                if (isNob(grabObjL))//ドアノブを持っている場合
                 {
-                   // var q = Quaternion.Euler(0, -45, 0);
-
-                    if (grabObjL.CompareTag("doornob")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
-                    else if (grabObjL.CompareTag("doornob2")) grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
-
+                    //ドアを動かす処理
+                    if (grabObjL.CompareTag("doornob"))
+                        grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                    else if (grabObjL.CompareTag("doornob2"))
+                        grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
                    
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
@@ -188,127 +181,151 @@ public class HorrorPlayer : MonoBehaviour
                 }
             }
         }
-        else if (grabObjL != null && (grabObjL.CompareTag("doornob") || grabObjL.CompareTag("doornob2")))
+        else if (isNob(grabObjL))//QもL1も押されておらず、ドアノブを持っていた場合
         {
-            grabObjL = null;
-            _isGrabNob = false;
+            grabObjL = null;//grabObjをnullに
+            _isGrabNob = false;//ドアノブを持っていない判定に
         }
+        //===============================================================================================================================
 
-        float tri = Input.GetAxis("LT RT");
 
-        if (Input.GetMouseButtonDown(0) || tri < 0)
+        //右手で物を掴む、離す処理=======================================================================================================
+        if (Input.GetKey(KeyCode.E) || Input.GetKey("joystick button 5"))//QかL1が押されたら
         {
-            if (grabObjL != null && !grabObjL.CompareTag("doornob") && !grabObjL.CompareTag("doornob2") && !grabObjL.CompareTag("candle"))
+            if (grabObjR == null)//左手に何も持っていない時
             {
-                if (grabObjL.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                if (Physics.Raycast(ray, out hit, _canGrabDistance))//Rayを飛ばしてオブジェクトがあるかチェック
                 {
-                    grabObjL.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObjL.transform.SetParent(null);
-                    grabObjL.transform.localScale = _grabObjLScale;
-                    grabObjL.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
-                    grabObjL = null;
-                }
-            }
-        }
-        else if (Input.GetMouseButtonDown(1) || tri > 0)
-        {
-            if (grabObjR != null && !grabObjR.CompareTag("doornob") && !grabObjR.CompareTag("doornob2") && !grabObjR.CompareTag("candle"))
-            {
-                if (grabObjR.TryGetComponent<Rigidbody>(out Rigidbody rb))
-                {
-                    grabObjR.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObjR.transform.SetParent(null);
-                    grabObjR.transform.localScale = _grabObjRScale;
-                    grabObjR.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
-                    grabObjR = null;
-                }
-            }
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKey("joystick button 5"))
-        {
-            if (grabObjR == null)
-            {
-                if (Physics.Raycast(ray, out hit, _canGrabDistance))
-                {
-                    if (hit.collider.gameObject.TryGetComponent<Outline>(out Outline component) && hit.collider.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    if (isCanGrabObject(hit.collider.gameObject))//hitしたオブジェクトが拾えるオブジェクトかチェック
                     {
-                        if (hit.collider.gameObject.CompareTag("doornob") || hit.collider.gameObject.CompareTag("doornob2"))
+                        grabObjR = hit.collider.gameObject;//当たったオブジェクトをgrabObjRに格納
+
+                        if (isNob(hit.collider.gameObject))//ドアノブだった場合
                         {
-                            grabObjR = hit.collider.gameObject;
-                            _isGrabNob = true;
+                            _isGrabNob = true;//ドアノブ掴んでるboolをtrueに
                             return;
-
                         }
-                        grabObjR = hit.collider.gameObject;
-                        grabObjR.GetComponent<Rigidbody>().isKinematic = true;
-                        _grabObjRScale = grabObjR.transform.localScale;
-                        grabObjR.transform.position = rightHand.position;
-                        grabObjR.transform.SetParent(rightHand.transform);
-                        grabObjR.transform.localRotation = Quaternion.identity;
+                        else //ドアノブ以外だった場合
+                        {
+                            Grab(grabObjR, rightHand);//掴む関数を呼び出す
+                        }
                     }
-
                 }
             }
-            else if (Input.GetKey(KeyCode.E) || Input.GetKeyDown("joystick button 5"))
+            else if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 5"))//既に物を持っているとき、もう一度QかL1が押されたら
             {
-                if (grabObjR.TryGetComponent<Rigidbody>(out Rigidbody rb))
-                {
-                    grabObjR.GetComponent<Rigidbody>().isKinematic = false;
-                    grabObjR.transform.SetParent(null);
-                    grabObjR.transform.localScale = _grabObjRScale;
-                    grabObjR = null;
-                    _isGrabNob = false;
-                }
+                Release(grabObjR, _grabObjRScale);//物を手放す関数を呼び出す
+                grabObjR = null;//掴んでいるオブジェクトをnullに
             }
-            else
+            else //何かを左手に持っているとき
             {
-                // ドア開閉
-                if (grabObjR.CompareTag("doornob") || grabObjR.CompareTag("doornob2"))
+                if (isNob(grabObjR))//ドアノブを持っている場合
                 {
-                    //var q = Quaternion.Euler(0, -45, 0);
-                    
-                    _doorAngleR = grabObjR.transform.root.gameObject.transform.eulerAngles.y;
-                    
-                    if (grabObjR.CompareTag("doornob")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
-                    else if (grabObjR.CompareTag("doornob2")) grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
+                    //ドアを動かす処理
+                    if (grabObjR.CompareTag("doornob"))
+                        grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
+                    else if (grabObjR.CompareTag("doornob2"))
+                        grabObjR.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
 
-                    
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
                     if (soundVolume > 0.3f)
-                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjR.transform.position, _doorOpenSoundVolume,_visibleSoundWave);
+                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjR.transform.position, _doorOpenSoundVolume, _visibleSoundWave);
                 }
             }
         }
-        else if (grabObjR != null && (grabObjR.CompareTag("doornob") || grabObjR.CompareTag("doornob2")))
+        else if (isNob(grabObjR))//QもL1も押されておらず、ドアノブを持っていた場合
         {
-            grabObjR = null;
-            _isGrabNob = false;
+            grabObjR = null;//grabObjをnullに
+            _isGrabNob = false;//ドアノブを持っていない判定に
         }
+        //===============================================================================================================================
+        
 
 
+        //物を投げる処理====================================================
 
+        float tri = Input.GetAxis("LT RT");//L2,R2の値を取得
 
+        if (Input.GetMouseButtonDown(0) || tri < 0)//左クリックかL2が押されたとき
+        {
+            if (grabObjL == null) return;//何も持っていなかった場合return
 
-}
+            if (!isNob(grabObjL, false) && !grabObjL.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
+            {
+                Throw(grabObjL);//投げる関数を呼び出す
+                grabObjL = null; //持っているオブジェクトをnullに
+            }
+        }
+        else if (Input.GetMouseButtonDown(1) || tri > 0)//右クリックかR2が押されたとき
+        {
+            if (grabObjR == null) return;//何も持っていなかった場合return
 
+            if (!isNob(grabObjR, false) && !grabObjR.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
+            {
+                Throw(grabObjR);//投げる関数を呼び出す
+                grabObjR = null;//持っているオブジェクトをnullに
+            }
+        }
+        //===================================================================
+    }
 
+    //掴めるオブジェクトかどうかを判別するbool
+    private bool isCanGrabObject(GameObject gameObject)
+    {
+        return gameObject.TryGetComponent<Outline>(out Outline component) && gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb);
+    }
+
+    //ドアノブかどうかを判定するbool
+    private bool isNob(GameObject gameObject, bool nullCheck = true)
+    {
+        if (nullCheck) return gameObject != null && (gameObject.CompareTag("doornob") || gameObject.CompareTag("doornob2"));
+        else return gameObject.CompareTag("doornob") || gameObject.CompareTag("doornob2");
+    }
+
+    //物を掴む関数
+    private void Grab(GameObject gameObject, Transform hand)
+    {
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        gameObject.transform.position = hand.position;
+        gameObject.transform.SetParent(hand);
+        gameObject.transform.localRotation = Quaternion.identity;
+    }
+
+    //物を手放す関数
+    private void Release(GameObject gameObject, Vector3 originScale)
+    {
+        if (gameObject != null)
+        {
+            if (gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                gameObject.transform.SetParent(null);
+                gameObject = null;
+                _isGrabNob = false;
+            }
+        }
+    }
+
+    //物を投げる関数
+    private void Throw(GameObject gameObject)
+    {
+        if (gameObject != null)
+        {
+            if (gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                gameObject.transform.SetParent(null);
+                gameObject.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
+                gameObject = null;
+                _isGrabNob = false;
+            }
+        }
+    }
 
    
     ///////////////////////////////////////////////////////////////////
    
-
-
-
-    
-    ///////////////////////////////////////////////////////
-   
-
-
-
-
     private void Moving()
     {
         float horizontal = Input.GetAxis("Horizontal");
