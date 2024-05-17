@@ -25,9 +25,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     [Range(0, 500)] private float _angularSpeed;
 
-    [SerializeField]
-    [Range(0.0f, 3.0f)] private float[] _speedMagnification = new float[5];
-
     [Space]
 
     [SerializeField]
