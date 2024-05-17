@@ -9,9 +9,15 @@ abstract public class SoundItem : MonoBehaviour
 
     [SerializeField]
     protected float _stopSeconds;
-
     [SerializeField]
     protected string _soundName;
+
+    [Header("ãóó£å∏êäãóó£")]
+    [SerializeField]
+    protected float _minSoundDistance = 1;
+
+    [SerializeField]
+    protected float _maxSoundDistance = 10;
 
     protected Rigidbody _rigidbody;
 
@@ -76,13 +82,14 @@ abstract public class SoundItem : MonoBehaviour
 
     private IEnumerator playSound()
     {
-        SoundManager.Instance.Play(_soundName,this.transform.position);
+
+        SoundManager.Instance.Play(_soundName,this.transform.position,_minSoundDistance,_maxSoundDistance);
 
         yield return new WaitForSeconds(_stopSeconds);
 
         SoundManager.Instance.Stop(_soundName);
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     protected void Bounce(Collision collision)

@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 50
-  sound: {fileID: 0}
-  stopSeconds: 0
-  soundName: 
+  _stopSeconds: 2
+  _soundName: can
+  _minSoundDistance: 1
+  _maxSoundDistance: 10

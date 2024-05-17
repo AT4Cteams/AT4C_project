@@ -645,7 +645,7 @@ GameObject:
   - component: {fileID: 266369365}
   - component: {fileID: 266369364}
   m_Layer: 0
-  m_Name: Sound
+  m_Name: SoundManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -670,7 +670,24 @@ MonoBehaviour:
     audioSource: {fileID: 0}
     minDistance: 1
     maxDistance: 50
-  playableDistance: 0.1
+  - name: can
+    audioClip: {fileID: 8300000, guid: da818573b2591604e8c767481d9888aa, type: 3}
+    playedTime: 2
+    audioSource: {fileID: 0}
+    minDistance: 1
+    maxDistance: 15
+  audioSourceList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playableDistance: 1
 --- !u!4 &266369365
 Transform:
   m_ObjectHideFlags: 0
@@ -683,7 +700,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 959209098}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &306561594
@@ -2494,6 +2512,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6560974997383073640, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      propertyPath: _soundName
+      value: can
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560974997383073640, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      propertyPath: _soundVolume
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560974997383073640, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      propertyPath: _stopSeconds
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560974997383073640, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      propertyPath: _maxSoundDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560974997383073640, guid: b407ab75120c1e94bbda88c76dfb1de9, type: 3}
+      propertyPath: _minSoundDistance
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3396,6 +3434,62 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
+--- !u!1 &959209096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 959209098}
+  - component: {fileID: 959209097}
+  m_Layer: 0
+  m_Name: Audio Reverb Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!167 &959209097
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959209096}
+  m_Enabled: 1
+  m_MinDistance: 50
+  m_MaxDistance: 50
+  m_ReverbPreset: 27
+  m_Room: -4039
+  m_RoomHF: -454
+  m_DecayTime: 0.1
+  m_DecayHFRatio: 0.83
+  m_Reflections: 1000
+  m_ReflectionsDelay: 0.3
+  m_Reverb: 2000
+  m_ReverbDelay: 0.1
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
+--- !u!4 &959209098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959209096}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.0453663, y: 2.99, z: 39.87}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266369365}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1056489370
 Mesh:
   m_ObjectHideFlags: 0
@@ -7702,6 +7796,10 @@ MonoBehaviour:
   _shootPower: 1000
   grabPoint: {fileID: 5684877972657817532}
   _canGrabDistance: 5
+  _footSoundVolume: 0
+  _doorOpenSoundVolume: 0
+  _footSoundDeadValue: 0
+  _bodyModel: {fileID: 0}
 --- !u!4 &5684877972657817532 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7956015125012542240, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
