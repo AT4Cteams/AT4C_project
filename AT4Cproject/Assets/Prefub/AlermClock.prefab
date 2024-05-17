@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 251291354189701346}
   - component: {fileID: 4891437186886021575}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: atama
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -202,7 +202,8 @@ Transform:
   m_LocalPosition: {x: 0.000000057228, y: 0.1763, z: -0.00000011396}
   m_LocalScale: {x: 0.039860852, y: 0.039860852, z: 0.039860852}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7267390648863410974}
   m_Father: {fileID: 438771761436969453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &251291354189701346
@@ -269,7 +270,7 @@ GameObject:
   - component: {fileID: 2859848682599881472}
   - component: {fileID: 4464937933345505620}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: asi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +378,6 @@ Transform:
   m_Children:
   - {fileID: 6166348783997817228}
   - {fileID: 9065863388242183187}
-  - {fileID: 7267390648863410974}
   - {fileID: 9221091663591973044}
   - {fileID: 4013234470708889400}
   - {fileID: 708794189519824122}
@@ -447,8 +447,9 @@ MonoBehaviour:
   _soundVolume: 80
   _stopSeconds: 0
   _soundName: 
-  _interval: 1
+  _interval: 0.7
   _roopTimes: 3
+  _capacitySpeed: 1
 --- !u!114 &3504707724782276195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +480,7 @@ GameObject:
   - component: {fileID: 8400598148187079309}
   - component: {fileID: 6197772176224992670}
   m_Layer: 0
-  m_Name: Capsule (3)
+  m_Name: asi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,7 +565,7 @@ GameObject:
   - component: {fileID: 9146393891356720527}
   - component: {fileID: 1628507223697899094}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: asi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -767,7 +768,7 @@ GameObject:
   - component: {fileID: 3609755157696312946}
   - component: {fileID: 9177414714075949504}
   m_Layer: 0
-  m_Name: Cylinder (1)
+  m_Name: atama
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,11 +783,11 @@ Transform:
   m_GameObject: {fileID: 7324049853516766453}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000000054705, y: 0.2161, z: -0.00000010978}
-  m_LocalScale: {x: 0.08217914, y: 0.0076706624, z: 0.08217914}
+  m_LocalPosition: {x: 0, y: 0.9984739, z: 0}
+  m_LocalScale: {x: 2.0616503, y: 0.192436, z: 2.0616503}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 438771761436969453}
+  m_Father: {fileID: 9065863388242183187}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3609755157696312946
 MeshFilter:
@@ -852,7 +853,7 @@ GameObject:
   - component: {fileID: 393649929534532398}
   - component: {fileID: 5670050163434574716}
   m_Layer: 0
-  m_Name: Capsule (2)
+  m_Name: asi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

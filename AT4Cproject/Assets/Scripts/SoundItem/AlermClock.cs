@@ -5,29 +5,34 @@ using UnityEngine;
 
 public class AlermClock : SoundItem
 {
+    [Space]
+    [Space]
     [SerializeField]
     private float _interval;
     [SerializeField]
     private int _roopTimes;
+    [SerializeField]
+    private float _capacitySpeed = 1.0f;
 
     private bool _playMode = false;
 
-    private bool _once = true;
+    private float _firstNGTime = 0f;
+
+    private void Update()
+    {
+        if(_firstNGTime < 10f)
+            _firstNGTime += Time.deltaTime;
+    }
 
     protected override void OnColEnter(Collision collision)
     {
+        if (_firstNGTime < 3f) return;
         if (_playMode) return;
-        StartCoroutine(Alerm());
+        if (_rigidbody.velocity.magnitude < _capacitySpeed) return;
+
+        StartAlerm();
     }
 
-    protected override void OnPlayerEnter(Collision collision)
-    {
-        if (!_once) return;
-
-        StartCoroutine(Alerm());
-
-        _once = false;
-    }
 
     private IEnumerator Alerm()
     {
@@ -47,5 +52,10 @@ public class AlermClock : SoundItem
 
         _playMode = false;
         yield break;
+    }
+
+    public void StartAlerm()
+    {
+        StartCoroutine(Alerm());
     }
 }
