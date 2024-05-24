@@ -17,6 +17,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private SoundData[] soundDatas;
 
+    [Header("サウンドデータの数だけインスペクターで増加させてください")]
     [SerializeField]
     private AudioSource[] audioSourceList;
 

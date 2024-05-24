@@ -3072,13 +3072,9 @@ MonoBehaviour:
     audioSource: {fileID: 0}
     minDistance: 1
     maxDistance: 50
-  - name: foot
-    audioClip: {fileID: 8300000, guid: ebf5e91deec838047888d82e8f721f2b, type: 3}
-    playedTime: 2
-    audioSource: {fileID: 0}
-    minDistance: 1
-    maxDistance: 50
-  audioSourceList: []
+  audioSourceList:
+  - {fileID: 0}
+  - {fileID: 0}
   playableDistance: 0.1
 --- !u!4 &555194889
 Transform:
