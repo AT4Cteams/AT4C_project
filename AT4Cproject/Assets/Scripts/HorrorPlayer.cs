@@ -63,6 +63,13 @@ public class HorrorPlayer : MonoBehaviour
     private float _doorAngleL;
     private float _doorAngleR;
 
+    private FootstepSE footstepSE;
+
+    private float stepCycle;
+    private float nextStep;
+    [SerializeField]
+    private float stepInterval = 5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,6 +83,10 @@ public class HorrorPlayer : MonoBehaviour
         _light = GameObject.Find("FlashLight");
 
         _bodyModel.enabled = false;
+
+        footstepSE = GetComponent<FootstepSE>();
+        stepCycle = 0f;
+        nextStep = stepCycle / 2f;
     }
 
     // Update is called once per frame
@@ -344,8 +355,23 @@ public class HorrorPlayer : MonoBehaviour
 
         // ‘«‰¹
         float soundVolume = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-        if(Mathf.Abs(horizontal) > _footSoundDeadValue || Mathf.Abs(vertical) > _footSoundDeadValue)
+        if (Mathf.Abs(horizontal) > _footSoundDeadValue || Mathf.Abs(vertical) > _footSoundDeadValue)
+        {
+            stepCycle += Time.deltaTime * _speed;
+
             Sound.AutoAdjustGenerate(soundVolume, 2f, transform.position, _footSoundVolume, _visibleSoundWave);
+
+            if(stepCycle > nextStep)
+            {
+                nextStep = stepCycle + stepInterval;
+                footstepSE.PlayFootstepSE();
+            }
+        }
+        else
+        {
+            stepCycle = 0f;
+            nextStep = stepInterval;
+        }
     }
 
     private void Jump()
