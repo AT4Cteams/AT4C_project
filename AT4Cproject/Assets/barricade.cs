@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakableFloor : GimmickBase
+public class barricade : GimmickBase
 {
     public override void OnColEnter(Collision collision)
     {
