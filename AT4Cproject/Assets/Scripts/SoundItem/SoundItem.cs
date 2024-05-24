@@ -29,18 +29,18 @@ abstract public class SoundItem : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor")) OnFloorEnter(collision);
-        else if (collision.gameObject.CompareTag("Wall")) OnWallEnter(collision);
-        else if (collision.gameObject.CompareTag("Enemy")) OnEnemyEnter(collision);
-        else if (collision.gameObject.CompareTag("Player")) OnPlayerEnter(collision);
+        if (collision.gameObject.CompareTag("Wall")) OnWallEnter(collision);
+        if (collision.gameObject.CompareTag("Enemy")) OnEnemyEnter(collision);
+        if (collision.gameObject.CompareTag("Player")) OnPlayerEnter(collision);
 
         if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall")) OnColEnter(collision);
     }
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor")) OnFloorStay(collision);
-        else if (collision.gameObject.CompareTag("Wall")) OnWallStay(collision);
-        else if (collision.gameObject.CompareTag("Enemy")) OnEnemyStay(collision);
-        else if (collision.gameObject.CompareTag("Player")) OnPlayerStay(collision);
+        if (collision.gameObject.CompareTag("Wall")) OnWallStay(collision);
+        if (collision.gameObject.CompareTag("Enemy")) OnEnemyStay(collision);
+        if (collision.gameObject.CompareTag("Player")) OnPlayerStay(collision);
 
         if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall")) OnColStay(collision);
     }
@@ -49,7 +49,7 @@ abstract public class SoundItem : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor")) OnFloorExit(collision);
         else if (collision.gameObject.CompareTag("Wall")) OnWallExit(collision);
         else if (collision.gameObject.CompareTag("Enemy")) OnEnemyExit(collision);
-        else if (collision.gameObject.CompareTag("Player")) OnPlayerExit(collision);
+        if (collision.gameObject.CompareTag("Player")) OnPlayerExit(collision);
 
         if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall")) OnColExit(collision);
     }
