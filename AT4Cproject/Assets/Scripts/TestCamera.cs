@@ -23,6 +23,20 @@ public class TestCamera : MonoBehaviour
 
     private bool _enabled = false;
 
+
+
+    private Vector3 _rawPosition = Vector3.zero;
+
+    private HorrorPlayer _player;
+
+    private bool _isMove = false;
+
+    public float _stepCycle;
+    public float _nextStep;
+    public float _stepInterval = 5f;
+
+    public float _addHeight = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,13 +45,58 @@ public class TestCamera : MonoBehaviour
 
         transform.localEulerAngles = new Vector3(30.0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
         StartCoroutine(GameStartMove());
+
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<HorrorPlayer>();
+        //stepInterval = _player.stepInterval * 2f;
+        //stepCycle = _player.stepCycle;
+        //nextStep = _player.nextStep;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = _target.transform.position + (_target.transform.forward * _offsetForward)
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            float v = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+
+            // float speed = _player.speed;
+            float speed = 10f;
+
+            if(v > 0)
+            {
+                _stepCycle += Time.deltaTime * speed;
+
+                if (_stepCycle > _nextStep)
+                {
+                   _nextStep = _stepCycle + _stepInterval;
+                }
+            }
+            else
+            {
+                _stepCycle = 0f;
+                _nextStep = _stepInterval;
+            }
+        }
+
+        if((_nextStep - _stepCycle) < _stepInterval / 2)
+        {
+            _addHeight = _stepInterval - _stepInterval - (_nextStep - _stepCycle);
+        }
+        else
+        {
+            _addHeight = -_stepInterval + (_nextStep - _stepCycle);
+        }
+
+        _addHeight *= 0.1f;
+
+        _rawPosition = _target.transform.position + (_target.transform.forward * _offsetForward)
                                                 + (_target.transform.up * _offsetHeight);
+
+        Vector3 nextPos = _rawPosition;
+        nextPos.y += _addHeight;
+
+        transform.position = nextPos;
 
         //transform.rotation = Quaternion.LookRotation(_target.transform.forward, Vector3.up);
         //transform.rotation = _target.transform.rotation;
