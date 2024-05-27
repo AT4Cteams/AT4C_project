@@ -45,6 +45,10 @@ public class TestCamera : MonoBehaviour
         //transform.eulerAngles = new Vector3(0, _target.eulerAngles.y, 0);
 
         rotateCameraAngle();
+
+        Vector3 rot = transform.localEulerAngles;
+        rot.z = 0f;
+        this.transform.localEulerAngles = rot;
     }
     private void rotateCameraAngle()
     {

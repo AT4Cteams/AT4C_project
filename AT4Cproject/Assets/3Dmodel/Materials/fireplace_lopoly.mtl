@@ -1,0 +1,16 @@
+newmtl lambert2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd fireplace_wood_fp_mat_BaseColor.png
+bump fireplace_wood_fp_mat_Normal.png -bm 1
+Ni 1.00
+newmtl lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd fireplace_cast_iron_fp_mat_BaseColor.png
+bump fireplace_cast_iron_fp_mat_Normal.png -bm 1
+Ni 1.00
