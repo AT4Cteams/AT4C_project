@@ -36,9 +36,9 @@ public class AudioSpectrum : MonoBehaviour
 
     #region Public variables
     public int numberOfSamples = 1024;
-    public BandType bandType = BandType.TenBand;
-    public float fallSpeed = 0.08f;
-    public float sensibility = 8.0f;
+    public BandType bandType = BandType.ThirtyOneBand;
+    public float fallSpeed = 0.5f;
+    public float sensibility = 20.0f;
     #endregion
 
     #region Private variables
