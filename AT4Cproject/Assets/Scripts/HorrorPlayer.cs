@@ -64,7 +64,7 @@ public class HorrorPlayer : MonoBehaviour
     private float _doorAngleL;
     private float _doorAngleR;
 
-<<<<<<< HEAD
+
     public static HorrorPlayer player;
 
 
@@ -72,7 +72,7 @@ public class HorrorPlayer : MonoBehaviour
     {
         player = this;
     }
-=======
+
     private FootstepSE footstepSE;
 
     private float stepCycle;
@@ -80,7 +80,6 @@ public class HorrorPlayer : MonoBehaviour
     [SerializeField]
     private float stepInterval = 5f;
 
->>>>>>> d613a58f968942ff8ac58d11182af0daa154f527
     // Start is called before the first frame update
     void Start()
     {
@@ -95,12 +94,9 @@ public class HorrorPlayer : MonoBehaviour
 
         _bodyModel.enabled = false;
 
-<<<<<<< HEAD
-=======
         footstepSE = GetComponent<FootstepSE>();
         stepCycle = 0f;
         nextStep = stepCycle / 2f;
->>>>>>> d613a58f968942ff8ac58d11182af0daa154f527
     }
 
     // Update is called once per frame
