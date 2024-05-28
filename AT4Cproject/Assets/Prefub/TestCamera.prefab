@@ -237,6 +237,7 @@ MonoBehaviour:
   _mouseSpeed: 1
   _controllerSpeed: 2
   _blackBack: {fileID: 0}
+  _maxDownHeight: 0.07
 --- !u!1001 &382571586342792507
 PrefabInstance:
   m_ObjectHideFlags: 0

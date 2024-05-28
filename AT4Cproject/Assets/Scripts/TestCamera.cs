@@ -31,11 +31,16 @@ public class TestCamera : MonoBehaviour
 
     private bool _isMove = false;
 
-    public float _stepCycle;
-    public float _nextStep;
-    public float _stepInterval = 5f;
+    private float _stepCycle;
+    private float _nextStep;
+    private float _stepInterval = 5f;
 
-    public float _addHeight = 0f;
+    private float _addHeight = 0f;
+
+    [SerializeField]
+    [Header("ï‡Ç≠éûÇÃóhÇÍÇÃã≠Ç≥")]
+    [Range(0.01f, 0.1f)]
+    private float _maxDownHeight;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +60,7 @@ public class TestCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        // Å´Å@å„Ç≈è¡Ç∑
         {
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
@@ -77,18 +83,36 @@ public class TestCamera : MonoBehaviour
                 _stepCycle = 0f;
                 _nextStep = _stepInterval;
             }
-        }
 
-        if((_nextStep - _stepCycle) < _stepInterval / 2)
-        {
-            _addHeight = _stepInterval - _stepInterval - (_nextStep - _stepCycle);
+            if ((_nextStep - _stepCycle) < _stepInterval / 2)
+            {
+                _addHeight = _stepInterval - _stepInterval - (_nextStep - _stepCycle);
+            }
+            else
+            {
+                _addHeight = -_stepInterval + (_nextStep - _stepCycle);
+            }
         }
-        else
-        {
-            _addHeight = -_stepInterval + (_nextStep - _stepCycle);
-        }
+        // Å™Å@å„Ç≈è¡Ç∑
 
-        _addHeight *= 0.1f;
+        //float interval = _player.stepInterval;
+        //float step = _player.nextStep - _player.stepCycle;
+
+        //if (step < interval / 2)
+        //{
+        //    _addHeight = interval - interval - step;
+        //}
+        //else
+        //{
+        //    _addHeight = interval + step;
+        //}
+
+        _addHeight *= _maxDownHeight;
+
+        if(_stepCycle <= 0.1f)
+        {
+            ReturnToOriginaHeight();
+        }
 
         _rawPosition = _target.transform.position + (_target.transform.forward * _offsetForward)
                                                 + (_target.transform.up * _offsetHeight);
@@ -97,11 +121,6 @@ public class TestCamera : MonoBehaviour
         nextPos.y += _addHeight;
 
         transform.position = nextPos;
-
-        //transform.rotation = Quaternion.LookRotation(_target.transform.forward, Vector3.up);
-        //transform.rotation = _target.transform.rotation;
-        //transform.eulerAngles = _target.eulerAngles;
-        //transform.eulerAngles = new Vector3(0, _target.eulerAngles.y, 0);
 
         rotateCameraAngle();
 
@@ -130,6 +149,14 @@ public class TestCamera : MonoBehaviour
         
         transform.eulerAngles += new Vector3(-angle.y, angle.x);
         transform.eulerAngles += new Vector3(controllerAngle.y, controllerAngle.x);
+    }
+
+    private void ReturnToOriginaHeight()
+    {
+        if (_addHeight == 0f) return;
+
+        _addHeight += 0.01f * Time.deltaTime;
+        if(_addHeight < 0f) _addHeight = 0f;
     }
 
     private IEnumerator GameStartMove()
