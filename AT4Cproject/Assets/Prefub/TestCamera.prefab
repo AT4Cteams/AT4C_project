@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 8927428179845101224}
   - component: {fileID: 8050001597895572837}
   - component: {fileID: 4179244930148914052}
+  - component: {fileID: 1903824944696860899}
   m_Layer: 0
   m_Name: TestCamera
   m_TagString: MainCamera
@@ -237,7 +238,42 @@ MonoBehaviour:
   _mouseSpeed: 1
   _controllerSpeed: 2
   _blackBack: {fileID: 0}
-  _maxDownHeight: 0.07
+  _maxDownHeight: 0.12
+  _returnHeightSpeed: 0.01
+--- !u!114 &1903824944696860899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249644617658473424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &382571586342792507
 PrefabInstance:
   m_ObjectHideFlags: 0

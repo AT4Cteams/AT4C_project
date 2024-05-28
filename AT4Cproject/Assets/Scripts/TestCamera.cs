@@ -108,35 +108,11 @@ public class TestCamera : MonoBehaviour
     // ˆÚ“®Žž‚Ì‰æ–Ê—h‚ê
     private void MoveCameraShake()
     {
+        _stepInterval = _player.stepInterval;
+        _nextStep = _player.nextStep;
+        _stepCycle = _player.stepCycle;
+
         float velMag = _player.GetComponent<Rigidbody>().velocity.magnitude;
-        _stepInterval = Mathf.Max(2.0f, Mathf.Min(10f, 15f - velMag));
-        // «@Œã‚ÅÁ‚·
-        {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-            float v = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-
-            // float speed = _player.speed;
-            float speed = 10f;
-
-
-            if (v > 0)
-            {
-                _stepCycle += Time.deltaTime * speed;
-
-                if (_stepCycle > _nextStep)
-                {
-                    _nextStep = _stepCycle + _stepInterval;
-                }
-            }
-            else
-            {
-
-                _stepCycle = 0f;
-                _nextStep = _stepInterval;
-            }
-        }
-        // ª@Œã‚ÅÁ‚·
 
         if(_stepCycle > 0.1f)
         {
@@ -150,17 +126,6 @@ public class TestCamera : MonoBehaviour
                 _addHeight = -_stepInterval + (_nextStep - _stepCycle);
             }
 
-            //float interval = _player.stepInterval;
-            //float step = _player.nextStep - _player.stepCycle;
-
-            //if (step < interval / 2)
-            //{
-            //    _addHeight = interval - interval - step;
-            //}
-            //else
-            //{
-            //    _addHeight = interval + step;
-            //}
             velMag = Mathf.Min(10f, velMag);
             float heightPower = Mathf.Max(0.1f, velMag / 10f);
 

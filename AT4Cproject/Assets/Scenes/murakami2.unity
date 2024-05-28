@@ -2904,50 +2904,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &434910522 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8249644617658473424, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-  m_PrefabInstance: {fileID: 1790835459}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &434910523 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3465044834727972344, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
   m_PrefabInstance: {fileID: 1790835459}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &434910528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 434910522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &488173028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12002,14 +11963,6 @@ PrefabInstance:
       propertyPath: _stepInterval
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: _maxDownHeight
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: _returnHeightSpeed
-      value: 0.01
-      objectReference: {fileID: 0}
     - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       propertyPath: field of view
       value: 60.000004
@@ -12048,10 +12001,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3465044834727972344, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2142482040}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8249644617658473424, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 434910528}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
 --- !u!43 &1798272689
 Mesh:
