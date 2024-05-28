@@ -202,8 +202,8 @@ public class HorrorPlayer : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//既に物を持っているとき、もう一度QかL1が押されたら
             {
-                grabObjL.GetComponentInChildren<GimmickBase>().PressedL1();
-                //Release(grabObjL, _grabObjLScale);//物を手放す関数を呼び出す
+                //grabObjL.GetComponentInChildren<GimmickBase>().PressedL1();
+                Release(grabObjL, _grabObjLScale);//物を手放す関数を呼び出す
                 grabObjL = null;//掴んでいるオブジェクトをnullに
             }
             else //何かを左手に持っているとき

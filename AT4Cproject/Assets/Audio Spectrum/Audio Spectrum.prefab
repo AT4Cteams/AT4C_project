@@ -68,7 +68,7 @@ MonoBehaviour:
   - {fileID: 3329842322513365516}
   - {fileID: 4302454463863237368}
   - {fileID: 984084412195122494}
-  scale: 50
+  scale: 700
 --- !u!65 &2822250496039053121
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -142,7 +142,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555320563265906447}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1874, y: 3.591, z: 33.308}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
