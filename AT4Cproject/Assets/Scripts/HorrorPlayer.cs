@@ -75,10 +75,9 @@ public class HorrorPlayer : MonoBehaviour
 
     private FootstepSE footstepSE;
 
-    private float stepCycle;
-    private float nextStep;
-    [SerializeField]
-    private float stepInterval = 5f;
+    public float stepCycle;
+    public float nextStep;
+    public float stepInterval = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -296,8 +295,8 @@ public class HorrorPlayer : MonoBehaviour
 
             if (!isNob(grabObjL, false) && !grabObjL.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
             {
-                grabObjL.GetComponentInChildren<GimmickBase>().PressedL2();
-                //Throw(grabObjL);//投げる関数を呼び出す
+                //grabObjL.GetComponentInChildren<GimmickBase>().PressedL2();
+                Throw(grabObjL);//投げる関数を呼び出す
                 grabObjL = null; //持っているオブジェクトをnullに
             }
         }
@@ -307,8 +306,8 @@ public class HorrorPlayer : MonoBehaviour
 
             if (!isNob(grabObjR, false) && !grabObjR.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
             {
-                grabObjL.GetComponentInChildren<GimmickBase>().PressedR2();
-               // Throw(grabObjR);//投げる関数を呼び出す
+                //grabObjR.GetComponentInChildren<GimmickBase>().PressedR2();
+                Throw(grabObjR);//投げる関数を呼び出す
                 grabObjR = null;//持っているオブジェクトをnullに
             }
         }
