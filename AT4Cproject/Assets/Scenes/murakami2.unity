@@ -12002,6 +12002,14 @@ PrefabInstance:
       propertyPath: _stepInterval
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
+      propertyPath: _maxDownHeight
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
+      propertyPath: _returnHeightSpeed
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       propertyPath: field of view
       value: 60.000004

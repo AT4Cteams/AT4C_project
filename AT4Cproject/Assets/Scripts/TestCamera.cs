@@ -39,8 +39,14 @@ public class TestCamera : MonoBehaviour
 
     [SerializeField]
     [Header("ï‡Ç≠éûÇÃóhÇÍÇÃã≠Ç≥")]
-    [Range(0.01f, 0.1f)]
+    [Range(0.01f, 0.15f)]
     private float _maxDownHeight;
+    [SerializeField]
+    [Header("à⁄ìÆÇÇ‚ÇﬂÇΩÇ∆Ç´ÇÃñﬂÇÈÇ∆Ç´ÇÃë¨Ç≥")]
+    [Range(0.001f, 0.01f)]
+    private float _returnHeightSpeed;
+    private bool _returnHeightMode = false;
+    private float _prevStepCycle = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -60,59 +66,7 @@ public class TestCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        // Å´Å@å„Ç≈è¡Ç∑
-        {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-            float v = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-
-            // float speed = _player.speed;
-            float speed = 10f;
-
-            if(v > 0)
-            {
-                _stepCycle += Time.deltaTime * speed;
-
-                if (_stepCycle > _nextStep)
-                {
-                   _nextStep = _stepCycle + _stepInterval;
-                }
-            }
-            else
-            {
-                _stepCycle = 0f;
-                _nextStep = _stepInterval;
-            }
-
-            if ((_nextStep - _stepCycle) < _stepInterval / 2)
-            {
-                _addHeight = _stepInterval - _stepInterval - (_nextStep - _stepCycle);
-            }
-            else
-            {
-                _addHeight = -_stepInterval + (_nextStep - _stepCycle);
-            }
-        }
-        // Å™Å@å„Ç≈è¡Ç∑
-
-        //float interval = _player.stepInterval;
-        //float step = _player.nextStep - _player.stepCycle;
-
-        //if (step < interval / 2)
-        //{
-        //    _addHeight = interval - interval - step;
-        //}
-        //else
-        //{
-        //    _addHeight = interval + step;
-        //}
-
-        _addHeight *= _maxDownHeight;
-
-        if(_stepCycle <= 0.1f)
-        {
-            ReturnToOriginaHeight();
-        }
+        MoveCameraShake();
 
         _rawPosition = _target.transform.position + (_target.transform.forward * _offsetForward)
                                                 + (_target.transform.up * _offsetHeight);
@@ -151,12 +105,120 @@ public class TestCamera : MonoBehaviour
         transform.eulerAngles += new Vector3(controllerAngle.y, controllerAngle.x);
     }
 
-    private void ReturnToOriginaHeight()
+    // à⁄ìÆéûÇÃâÊñ óhÇÍ
+    private void MoveCameraShake()
     {
-        if (_addHeight == 0f) return;
+        float velMag = _player.GetComponent<Rigidbody>().velocity.magnitude;
+        _stepInterval = Mathf.Max(2.0f, Mathf.Min(10f, 15f - velMag));
+        // Å´Å@å„Ç≈è¡Ç∑
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            float v = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
 
-        _addHeight += 0.01f * Time.deltaTime;
-        if(_addHeight < 0f) _addHeight = 0f;
+            // float speed = _player.speed;
+            float speed = 10f;
+
+
+            if (v > 0)
+            {
+                _stepCycle += Time.deltaTime * speed;
+
+                if (_stepCycle > _nextStep)
+                {
+                    _nextStep = _stepCycle + _stepInterval;
+                }
+            }
+            else
+            {
+
+                _stepCycle = 0f;
+                _nextStep = _stepInterval;
+            }
+        }
+        // Å™Å@å„Ç≈è¡Ç∑
+
+        if(_stepCycle > 0.1f)
+        {
+
+            if ((_nextStep - _stepCycle) < _stepInterval / 2)
+            {
+                _addHeight = _stepInterval - _stepInterval - (_nextStep - _stepCycle);
+            }
+            else
+            {
+                _addHeight = -_stepInterval + (_nextStep - _stepCycle);
+            }
+
+            //float interval = _player.stepInterval;
+            //float step = _player.nextStep - _player.stepCycle;
+
+            //if (step < interval / 2)
+            //{
+            //    _addHeight = interval - interval - step;
+            //}
+            //else
+            //{
+            //    _addHeight = interval + step;
+            //}
+            velMag = Mathf.Min(10f, velMag);
+            float heightPower = Mathf.Max(0.1f, velMag / 10f);
+
+            _addHeight *= _maxDownHeight * heightPower;
+
+        }
+        else
+        {
+            if( _stepCycle <= 0f && _prevStepCycle > 0f)
+                StartCoroutine(ReturnToOriginalHeight());
+        }
+
+        _prevStepCycle = _stepCycle;
+    }
+
+    private IEnumerator ReturnToOriginalHeight()
+    {
+        if (_returnHeightMode) yield break;
+        _returnHeightMode = true;
+
+        while(true)
+        {
+            if(_stepCycle > 0.1f)
+            {
+                _returnHeightMode = false;
+                yield break;
+            }
+
+            if(_addHeight > -0.1f)
+            {
+                _addHeight -= _returnHeightSpeed;
+                yield return null;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        while(true)
+        {
+            if (_stepCycle > 0.1f)
+            {
+                _returnHeightMode = false;
+                yield break;
+            }
+
+            if (_addHeight < 0f)
+            {
+                _addHeight += _returnHeightSpeed;
+                yield return null;
+            }
+            else
+            {
+                _returnHeightMode = false;
+                yield break;
+            }
+        }
     }
 
     private IEnumerator GameStartMove()
