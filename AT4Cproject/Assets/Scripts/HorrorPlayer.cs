@@ -32,10 +32,11 @@ public class HorrorPlayer : MonoBehaviour
 
     private bool _isJump = true;
 
-    [SerializeField] private Transform rightHand;
-    [SerializeField] private Transform leftHand;
-    private GameObject grabObjL;
-    private GameObject grabObjR;
+    public Transform rightHand;
+    public Transform leftHand;
+
+    [HideInInspector] public GameObject grabObjL;
+    [HideInInspector] public GameObject grabObjR;
     private GameObject hitObject;
 
     [Header("オブジェクトを掴める距離")]
@@ -62,6 +63,15 @@ public class HorrorPlayer : MonoBehaviour
 
     private float _doorAngleL;
     private float _doorAngleR;
+
+
+    public static HorrorPlayer player;
+
+
+    private void Awake()
+    {
+        player = this;
+    }
 
     private FootstepSE footstepSE;
 
@@ -145,6 +155,27 @@ public class HorrorPlayer : MonoBehaviour
         }
         //============================================================================================================
 
+        //if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//QかL1が押されたら
+        //{
+        //    if (grabObjL == null)//左手に何も持っていない時
+        //    {
+        //        if (Physics.Raycast(ray, out hit, _canGrabDistance))//Rayを飛ばしてオブジェクトがあるかチェック
+        //        {
+        //            if (isCanGrabObject(hit.collider.gameObject))//hitしたオブジェクトが拾えるオブジェクトかチェック
+        //            {
+        //                grabObjL = hit.collider.gameObject;//当たったオブジェクトをgrabObjLに格納
+
+        //                Grab(grabObjL, leftHand);//掴む関数を呼び出す
+        //                Debug.Log("tukami");
+        //            }
+        //        }
+        //    }
+        //    else //if(Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//既に物を持っているとき、もう一度QかL1が押されたら
+        //    {
+        //        grabObjL.GetComponentInChildren<GimmickBase>().PressedL1();
+        //        Debug.Log("release");
+        //    }
+        //}
 
 
         //左手で物を掴む、離す処理======================================================================================
@@ -172,7 +203,8 @@ public class HorrorPlayer : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//既に物を持っているとき、もう一度QかL1が押されたら
             {
-                Release(grabObjL, _grabObjLScale);//物を手放す関数を呼び出す
+                grabObjL.GetComponentInChildren<GimmickBase>().PressedL1();
+                //Release(grabObjL, _grabObjLScale);//物を手放す関数を呼び出す
                 grabObjL = null;//掴んでいるオブジェクトをnullに
             }
             else //何かを左手に持っているとき
@@ -184,11 +216,11 @@ public class HorrorPlayer : MonoBehaviour
                         grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, Input.GetAxis("Vertical") * 2, 0);
                     else if (grabObjL.CompareTag("doornob2"))
                         grabObjL.transform.root.gameObject.transform.eulerAngles += new Vector3(0, -Input.GetAxis("Vertical") * 2, 0);
-                   
+
                     // ドアの開閉音
                     float soundVolume = Mathf.Abs(Input.GetAxis("Vertical"));
                     if (soundVolume > 0.3f)
-                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjL.transform.position, _doorOpenSoundVolume,_visibleSoundWave);
+                        Sound.AutoAdjustGenerate(soundVolume, 1f, grabObjL.transform.position, _doorOpenSoundVolume, _visibleSoundWave);
                 }
             }
         }
@@ -264,7 +296,8 @@ public class HorrorPlayer : MonoBehaviour
 
             if (!isNob(grabObjL, false) && !grabObjL.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
             {
-                Throw(grabObjL);//投げる関数を呼び出す
+                grabObjL.GetComponentInChildren<GimmickBase>().PressedL2();
+                //Throw(grabObjL);//投げる関数を呼び出す
                 grabObjL = null; //持っているオブジェクトをnullに
             }
         }
@@ -274,7 +307,8 @@ public class HorrorPlayer : MonoBehaviour
 
             if (!isNob(grabObjR, false) && !grabObjR.CompareTag("candle"))//ドアノブでもキャンドルでもない場合
             {
-                Throw(grabObjR);//投げる関数を呼び出す
+                grabObjL.GetComponentInChildren<GimmickBase>().PressedR2();
+               // Throw(grabObjR);//投げる関数を呼び出す
                 grabObjR = null;//持っているオブジェクトをnullに
             }
         }
