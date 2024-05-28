@@ -10772,10 +10772,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3750862412091916951, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: m_Name
-      value: rightHand
-      objectReference: {fileID: 0}
     - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       propertyPath: _target
       value: 
@@ -10784,9 +10780,13 @@ PrefabInstance:
       propertyPath: _blackBack
       value: 
       objectReference: {fileID: 1972006190}
+    - target: {fileID: 6641471529690232883, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7956015125012542240, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.5
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8249644617658473424, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       propertyPath: m_Name
