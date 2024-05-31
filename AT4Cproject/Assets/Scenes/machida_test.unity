@@ -3125,7 +3125,14 @@ MonoBehaviour:
     audioSource: {fileID: 0}
     minDistance: 1
     maxDistance: 50
+  - name: brokenglass
+    audioClip: {fileID: 8300000, guid: 0cc4e7ee8ab520b479d89e7b0f79166c, type: 3}
+    playedTime: 2
+    audioSource: {fileID: 0}
+    minDistance: 1
+    maxDistance: 50
   audioSourceList:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   playableDistance: 0.1
@@ -12153,7 +12160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300885597411107687, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4597724355671328392, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_LocalPosition.x
