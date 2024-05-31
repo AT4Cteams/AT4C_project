@@ -448,8 +448,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
 --- !u!1 &1398526468844188357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,8 +1074,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
 --- !u!1 &2265234109927529304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,8 +1526,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
 --- !u!1 &2395354847973855345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,8 +1978,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
 --- !u!1 &4595943050666999623
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,8 +2810,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
 --- !u!1 &8601877496932193477
 GameObject:
   m_ObjectHideFlags: 0
@@ -3426,5 +3436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundVolume: 20
-  _stopSeconds: 0
-  _soundName: 
+  _stopSeconds: 2
+  _soundName: brokenglass
+  _minSoundDistance: 1
+  _maxSoundDistance: 10
