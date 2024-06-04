@@ -127,7 +127,7 @@ public class TestCamera : MonoBehaviour
             }
 
             velMag = Mathf.Min(10f, velMag);
-            float heightPower = Mathf.Max(0.1f, velMag / 10f);
+            float heightPower = Mathf.Max(0.05f, velMag / 10f);
 
             _addHeight *= _maxDownHeight * heightPower;
 

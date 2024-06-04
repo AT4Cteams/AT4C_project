@@ -388,7 +388,7 @@ public class HorrorPlayer : MonoBehaviour
 
 
         float velMag = _rigidbody.velocity.magnitude;
-        stepInterval = Mathf.Max(2.0f, Mathf.Min(10f, 15f - velMag));
+        stepInterval = Mathf.Max(1.0f, Mathf.Min(10f, 15f - velMag));
 
         // ‘«‰¹
         float soundVolume = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
