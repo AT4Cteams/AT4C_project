@@ -48,6 +48,10 @@ public class TestCamera : MonoBehaviour
     private bool _returnHeightMode = false;
     private float _prevStepCycle = 0f;
 
+    [SerializeField]
+    [Header("捕まった時の振り返る速度")]
+    private float _gameOverRotSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,10 +88,7 @@ public class TestCamera : MonoBehaviour
     }
     private void rotateCameraAngle()
     {
-
-         
-
-        //if (!_enabled) return;
+        if (!_enabled) return;
 
         Vector3 angle = new Vector3(
             Input.GetAxis("Mouse X") * _mouseSpeed,
@@ -108,6 +109,8 @@ public class TestCamera : MonoBehaviour
     // 移動時の画面揺れ
     private void MoveCameraShake()
     {
+        if (!_enabled) return;
+
         _stepInterval = _player.stepInterval;
         _nextStep = _player.nextStep;
         _stepCycle = _player.stepCycle;
@@ -212,19 +215,51 @@ public class TestCamera : MonoBehaviour
         yield break;
     }
 
-    private IEnumerator GameOverMove()
+    private IEnumerator GameOverMove(Vector3 position)
     {
-        Vector3 startAngle = transform.localEulerAngles;
-        Vector3 targetAngle = new Vector3(90f, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        // プレイヤー固定
+        _player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+
+        Quaternion startAngle = transform.rotation;
+        Quaternion targetAngle = Quaternion.LookRotation((position - _player.transform.position));
 
         Color startColor = new Color(0, 0, 0, 0);
         Color targetColor = new Color(0, 0, 0, 1);
 
         while (_time < 1.0f)
         {
-            _time += Time.deltaTime * 1.2f;
+            _time += Time.deltaTime * _gameOverRotSpeed;
 
-            transform.localEulerAngles = Vector3.Slerp(startAngle, targetAngle, _time);
+            transform.rotation = Quaternion.Slerp(startAngle, targetAngle, _time);
+
+            if(_time < 0.5f)
+            {
+                _blackBack.color = Color.Lerp(startColor, targetColor, _time + 0.4f);
+            }
+            else
+            {
+                _blackBack.color = Color.Lerp(startColor, targetColor, 1.0f - (_time + 0.4f));
+            }
+            
+            yield return null;
+        }
+
+        _blackBack.color = startColor;
+
+        _time = 0f;
+
+        while (_time < 1.0f)
+        {
+            _time += Time.deltaTime * 2f;
+
+            yield return null;
+        }
+
+        _time = 0f;
+
+        while (_time < 1.0f)
+        {
+            _time += Time.deltaTime * _gameOverRotSpeed * 0.5f;
 
             _blackBack.color = Color.Lerp(startColor, targetColor, _time);
 
@@ -232,15 +267,17 @@ public class TestCamera : MonoBehaviour
         }
 
         _time = 0f;
+
         _enabled = true;
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         yield break;
     }
 
-    public void GameOver()
+    public void GameOver(Vector3 position)
     {
         _enabled = false;
-        StartCoroutine(GameOverMove());
+        StartCoroutine(GameOverMove(position));
     }
 
     public bool GetGameOverEnable()

@@ -17,6 +17,7 @@ public enum EnemyState
     Tracking,
     Wander,
     Attack,
+    Captured,
 }
 
 public class EnemyStateContext
@@ -38,6 +39,7 @@ public class EnemyStateContext
             { EnemyState.Tracking, new EnemyStateTracking(enemy) },
             { EnemyState.Wander, new EnemyStateWander(enemy) },
             { EnemyState.Attack, new EnemyStateAttack(enemy) },
+            { EnemyState.Captured, new EnemyStateCaptured(enemy) },
         };
         _stateTable = table;
         _currentState = _stateTable[initState];

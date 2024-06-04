@@ -45,6 +45,11 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     public NavMeshSurface navMeshSurface;
 
+    [SerializeField]
+    [Header("捕まえた時のカメラとの距離")]
+    [Range(0f, 2f)]
+    private float _captureCameraLength;
+
     // プロパティ==================================
     public float speed => _speed;
     public float angularSpeed => _angularSpeed;
@@ -136,15 +141,37 @@ public class Enemy : MonoBehaviour
             if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
             if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
 
-            Camera.main.GetComponent<TestCamera>().GameOver();
+            Camera.main.GetComponent<TestCamera>().GameOver(this.transform.position + (transform.up * 3.5f));
 
             Vector3 pos = Camera.main.transform.position + (Camera.main.transform.forward * 0.5f);
 
             Instantiate(_attackEffect, pos, Quaternion.Euler(90f, 0f, 0f));
+
+            ChangeState(EnemyState.Captured);
+            LookAtCamera();
         }
         else
         {
             Debug.Log("攻撃当たらなかった...");
+        }
+    }
+
+    private void LookAtCamera()
+    {
+        transform.LookAt(Camera.main.transform.position);
+
+        GetComponent<Collider>().isTrigger = true;
+
+        Vector3 cpos = (Camera.main.transform.position);
+        Vector3 v = (cpos - transform.position).normalized * 1.0f;
+
+        float len = Vector3.Distance(cpos, transform.position);
+
+        while(len > _captureCameraLength)
+        {
+            transform.position += v * 0.1f;
+
+            len = Vector3.Distance(cpos, transform.position);
         }
     }
 }
