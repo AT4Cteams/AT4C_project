@@ -4119,10 +4119,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 825007168127717944, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
-      propertyPath: _captureCameraLength
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4300885597411107687, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_Name
       value: Enemy2 (1)
@@ -12147,22 +12143,6 @@ PrefabInstance:
       propertyPath: _gameOverRotTime
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4179244930148914052, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: _gameOverRotSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: field of view
-      value: 60.000004
-      objectReference: {fileID: 0}
-    - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: far clip plane
-      value: 5000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
-      propertyPath: near clip plane
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 4586921455925590396, guid: 18923ebf37da5824c9b9b3b7372b81da, type: 3}
       propertyPath: orthographic size
       value: 10
@@ -13753,10 +13733,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 825007168127717944, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
-      propertyPath: _speed
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 1814187223741533195, guid: 60c12e5a6d3d42148a42f80f5c2c14c6, type: 3}
       propertyPath: m_Mesh
       value: 

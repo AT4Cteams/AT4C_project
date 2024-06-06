@@ -1,5 +1,7 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +9,8 @@ using UnityEngine.UI;
 
 public class TestCamera : MonoBehaviour
 {
+    private Camera _camera;
+
     public float _offsetHeight;
     public float _offsetForward;
 
@@ -52,9 +56,17 @@ public class TestCamera : MonoBehaviour
     [Header("捕まった時の振り返る速度")]
     private float _gameOverRotSpeed;
 
+    [SerializeField]
+    [Header("捕まった時のブラックアウトの速度")]
+    private float _gameOverFadeSpeed;
+
+    private CinemachineImpulseSource _impulseSource;
+
     // Start is called before the first frame update
     void Start()
     {
+        _camera = this.GetComponent<Camera>();
+
         //_target = GameObject.FindGameObjectWithTag("Player");
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -65,6 +77,8 @@ public class TestCamera : MonoBehaviour
         //stepInterval = _player.stepInterval * 2f;
         //stepCycle = _player.stepCycle;
         //nextStep = _player.nextStep;
+
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     // Update is called once per frame
@@ -217,15 +231,16 @@ public class TestCamera : MonoBehaviour
 
     private IEnumerator GameOverMove(Vector3 position)
     {
-        // プレイヤー固定
-        _player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
 
         Quaternion startAngle = transform.rotation;
-        Quaternion targetAngle = Quaternion.LookRotation((position - _player.transform.position));
+        Quaternion targetAngle = Quaternion.LookRotation((position - this.transform.position));
 
         Color startColor = new Color(0, 0, 0, 0);
         Color targetColor = new Color(0, 0, 0, 1);
 
+        _impulseSource.GenerateImpulse();
+
+        // エネミーに対して振り向く
         while (_time < 1.0f)
         {
             _time += Time.deltaTime * _gameOverRotSpeed;
@@ -248,6 +263,7 @@ public class TestCamera : MonoBehaviour
 
         _time = 0f;
 
+        // 一定時間固定
         while (_time < 1.0f)
         {
             _time += Time.deltaTime * 2f;
@@ -257,12 +273,19 @@ public class TestCamera : MonoBehaviour
 
         _time = 0f;
 
+        // 画面ブラックアウト
+        float defaultFOV = _camera.fieldOfView;
+        float endFOV = defaultFOV * 0.2f;
         while (_time < 1.0f)
         {
-            _time += Time.deltaTime * _gameOverRotSpeed * 0.5f;
+            _time += Time.deltaTime * _gameOverFadeSpeed;
 
             _blackBack.color = Color.Lerp(startColor, targetColor, _time);
+            _camera.fieldOfView = Mathf.Lerp(defaultFOV, endFOV, _time);
 
+            Debug.Log(_camera.fieldOfView);
+
+            _impulseSource.GenerateImpulse();
             yield return null;
         }
 

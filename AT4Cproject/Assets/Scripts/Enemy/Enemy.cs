@@ -141,14 +141,20 @@ public class Enemy : MonoBehaviour
             if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
             if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
 
-            Camera.main.GetComponent<TestCamera>().GameOver(this.transform.position + (transform.up * 3.5f));
-
             Vector3 pos = Camera.main.transform.position + (Camera.main.transform.forward * 0.5f);
 
             Instantiate(_attackEffect, pos, Quaternion.Euler(90f, 0f, 0f));
 
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+
+
             ChangeState(EnemyState.Captured);
             LookAtCamera();
+
+            Vector3 headPos = new Vector3(0f, 2f, 0f);
+
+            Camera.main.GetComponent<TestCamera>().GameOver(this.transform.position + headPos);
         }
         else
         {
@@ -158,20 +164,31 @@ public class Enemy : MonoBehaviour
 
     private void LookAtCamera()
     {
-        transform.LookAt(Camera.main.transform.position);
-
-        GetComponent<Collider>().isTrigger = true;
 
         Vector3 cpos = (Camera.main.transform.position);
-        Vector3 v = (cpos - transform.position).normalized * 1.0f;
 
-        float len = Vector3.Distance(cpos, transform.position);
+        transform.LookAt(cpos);
 
-        while(len > _captureCameraLength)
+        GetComponentInChildren<Collider>().isTrigger = true;
+
+        //this.transform.position = new Vector3(transform.position.x, cpos.y, transform.position.z);
+
+        // ‹ß‚Ã‚­
         {
-            transform.position += v * 0.1f;
+            Vector3 pos = transform.position;
 
-            len = Vector3.Distance(cpos, transform.position);
+            Vector3 v = (cpos - transform.position).normalized * 1.0f;
+
+            float len = Vector3.Distance(cpos, transform.position);
+
+            while (len > _captureCameraLength)
+            {
+                pos += v * 0.1f;
+
+                len = Vector3.Distance(cpos, pos);
+            }
+
+            transform.position = pos;
         }
     }
 }
