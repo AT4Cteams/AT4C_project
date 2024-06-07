@@ -389,7 +389,8 @@ MonoBehaviour:
   _attackEffect: {fileID: 2594693758009780271, guid: d845f25e907a0624182ee8f74e7838fe, type: 3}
   _attackArea: {fileID: 6673267274589638928}
   navMeshSurface: {fileID: 0}
-  _captureCameraLength: 1.5
+  _captureCameraLength: 1.3
+  _headPos: 3
 --- !u!195 &8749706503982514802
 NavMeshAgent:
   m_ObjectHideFlags: 0
