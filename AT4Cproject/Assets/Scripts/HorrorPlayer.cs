@@ -45,7 +45,7 @@ public class HorrorPlayer : MonoBehaviour
     private Vector3 _grabObjLScale = Vector3.one;
     private Vector3 _grabObjRScale = Vector3.one;
 
-    private bool _isGrabNob;
+    [HideInInspector] public bool _freeze;
 
     [SerializeField] private bool _visibleSoundWave = false;
     [SerializeField]
@@ -101,7 +101,7 @@ public class HorrorPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_isGrabNob)//ドアノブを掴んでいない時
+        if (!_freeze)//ドアノブを掴んでいない時
         {
             Moving();//移動の処理
 
@@ -118,7 +118,7 @@ public class HorrorPlayer : MonoBehaviour
         }
 
 
-
+        #region 輪郭をつける処理
         //輪郭をつける処理(Outlineコンポーネントがついているかどうかで光らせるオブジェクトを判別している)====================================
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -127,22 +127,20 @@ public class HorrorPlayer : MonoBehaviour
 
         if (Physics.Raycast(ray, out _hit, _canGrabDistance))
         {
-            if (isCanGrabObject(_hit.collider.gameObject))
+            if (_hit.collider.gameObject != null)
             {
-                if (hitObject != null)
+                if (_hit.collider.TryGetComponent<Outline>(out var component))
                 {
-                    hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
-                    hitObject = null;
+                    if (hitObject != _hit.collider.gameObject)
+                    {
+                        if(hitObject != null)hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
+                        hitObject = _hit.collider.gameObject;
+                    }
+                    component.OutlineColor = Color.green;
                 }
-
-                hitObject = _hit.collider.gameObject;
-                hitObject.GetComponent<Outline>().OutlineColor = Color.green;
-            }
-            else
-            {
-                if (hitObject != null)
+                else
                 {
-                    hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
+                    if(hitObject != null)hitObject.GetComponent<Outline>().OutlineColor = Color.clear;
                     hitObject = null;
                 }
             }
@@ -153,6 +151,7 @@ public class HorrorPlayer : MonoBehaviour
             hitObject = null;
         }
         //============================================================================================================
+        #endregion
 
         //if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 4"))//QかL1が押されたら
         //{
@@ -176,9 +175,20 @@ public class HorrorPlayer : MonoBehaviour
         //    }
         //}
 
+        if (Input.GetKeyDown(KeyCode.F) || Input.GetKey("joystick button 4")) //FかYボタンが押されたら
+        {
+            if (Physics.Raycast(ray, out hit, _canGrabDistance))//Rayを飛ばしてオブジェクトがあるかチェック
+            {
+                if (hit.collider.TryGetComponent<Wardrobe>(out var component))//hitしたオブジェクトがGimmickBaseを継承しているかチェック
+                {
+                    hit.collider.GetComponent<GimmickBase>().PressedY();
+                }
+            }
+        }
 
-        //左手で物を掴む、離す処理======================================================================================
-        if (Input.GetKey(KeyCode.Q) || Input.GetKey("joystick button 4"))//QかL1が押されたら
+
+            //左手で物を掴む、離す処理======================================================================================
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey("joystick button 4"))//QかL1が押されたら
         {
             if (grabObjL == null)//左手に何も持っていない時
             {
@@ -190,7 +200,7 @@ public class HorrorPlayer : MonoBehaviour
 
                         if (isNob(hit.collider.gameObject))//ドアノブだった場合
                         {
-                            _isGrabNob = true;//ドアノブ掴んでるboolをtrueに
+                            _freeze = true;//ドアノブ掴んでるboolをtrueに
                             return;
                         }
                         else //ドアノブ以外だった場合
@@ -226,7 +236,7 @@ public class HorrorPlayer : MonoBehaviour
         else if (isNob(grabObjL))//QもL1も押されておらず、ドアノブを持っていた場合
         {
             grabObjL = null;//grabObjをnullに
-            _isGrabNob = false;//ドアノブを持っていない判定に
+            _freeze = false;//ドアノブを持っていない判定に
         }
         //===============================================================================================================================
 
@@ -244,7 +254,7 @@ public class HorrorPlayer : MonoBehaviour
 
                         if (isNob(hit.collider.gameObject))//ドアノブだった場合
                         {
-                            _isGrabNob = true;//ドアノブ掴んでるboolをtrueに
+                            _freeze = true;//ドアノブ掴んでるboolをtrueに
                             return;
                         }
                         else //ドアノブ以外だった場合
@@ -279,7 +289,7 @@ public class HorrorPlayer : MonoBehaviour
         else if (isNob(grabObjR))//QもL1も押されておらず、ドアノブを持っていた場合
         {
             grabObjR = null;//grabObjをnullに
-            _isGrabNob = false;//ドアノブを持っていない判定に
+            _freeze = false;//ドアノブを持っていない判定に
         }
         //===============================================================================================================================
         
@@ -346,7 +356,7 @@ public class HorrorPlayer : MonoBehaviour
                 gameObject.GetComponent<Rigidbody>().isKinematic = false;
                 gameObject.transform.SetParent(null);
                 gameObject = null;
-                _isGrabNob = false;
+                _freeze = false;
             }
         }
     }
@@ -362,7 +372,7 @@ public class HorrorPlayer : MonoBehaviour
                 gameObject.transform.SetParent(null);
                 gameObject.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward.normalized * _shootPower);
                 gameObject = null;
-                _isGrabNob = false;
+                _freeze = false;
             }
         }
     }

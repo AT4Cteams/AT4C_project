@@ -113,6 +113,7 @@ abstract public class GimmickBase : MonoBehaviour
     public virtual void PressedR2() { }
     public virtual void PressedL1() { }
     public virtual void PressedR1() { }
+    public virtual void PressedY() { }
 
     public virtual void OnColEnter(Collision collision) { }
     public virtual void OnColStay(Collision collision) { }
