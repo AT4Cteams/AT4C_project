@@ -50,6 +50,10 @@ public class Enemy : MonoBehaviour
     [Range(0f, 2f)]
     private float _captureCameraLength;
 
+    [SerializeField]
+    [Range(0f, 10f)]
+    private float _headPos;
+
     // プロパティ==================================
     public float speed => _speed;
     public float angularSpeed => _angularSpeed;
@@ -122,7 +126,6 @@ public class Enemy : MonoBehaviour
             {
                 //Debug.Log("もっと大きい音が聞こえた！！");
 
-
                 // ステートの変更はせずにターゲットのみ変更
                 _targetVolume = nextTargetVolume;
                 ChangeTargetSound(sound);
@@ -139,7 +142,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("攻撃が当たったよ！");
 
             if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
-            if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
+            if (!Camera.main.GetComponent<TestCamera>().operationEnable) return;
 
             Vector3 pos = Camera.main.transform.position + (Camera.main.transform.forward * 0.5f);
 
@@ -148,11 +151,11 @@ public class Enemy : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
 
-
             ChangeState(EnemyState.Captured);
+
             LookAtCamera();
 
-            Vector3 headPos = new Vector3(0f, 2f, 0f);
+            Vector3 headPos = new Vector3(0f, _headPos, 0f);
 
             Camera.main.GetComponent<TestCamera>().GameOver(this.transform.position + headPos);
         }
@@ -167,28 +170,22 @@ public class Enemy : MonoBehaviour
 
         Vector3 cpos = (Camera.main.transform.position);
 
-        transform.LookAt(cpos);
-
         GetComponentInChildren<Collider>().isTrigger = true;
-
-        //this.transform.position = new Vector3(transform.position.x, cpos.y, transform.position.z);
 
         // 近づく
         {
             Vector3 pos = transform.position;
 
-            Vector3 v = (cpos - transform.position).normalized * 1.0f;
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0f;
 
-            float len = Vector3.Distance(cpos, transform.position);
+            pos = cpos - (cameraForward * _captureCameraLength);
 
-            while (len > _captureCameraLength)
-            {
-                pos += v * 0.1f;
-
-                len = Vector3.Distance(cpos, pos);
-            }
+            pos.y = transform.position.y;
 
             transform.position = pos;
+
+            transform.LookAt(cpos);
         }
     }
 }

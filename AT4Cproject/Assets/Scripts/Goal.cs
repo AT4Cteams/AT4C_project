@@ -21,7 +21,7 @@ public class Goal : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
-            if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
+            if (!Camera.main.GetComponent<TestCamera>().operationEnable) return;
 
             Camera.main.GetComponent<TestCamera>().GameOver(transform.position);
         }
@@ -32,7 +32,7 @@ public class Goal : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             if (!Camera.main.TryGetComponent<TestCamera>(out TestCamera component)) return;
-            if (!Camera.main.GetComponent<TestCamera>().GetGameOverEnable()) return;
+            if (!Camera.main.GetComponent<TestCamera>().operationEnable) return;
 
             Camera.main.GetComponent<TestCamera>().GameOver(transform.position);
         }
