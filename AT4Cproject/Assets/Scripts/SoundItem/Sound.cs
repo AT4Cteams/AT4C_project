@@ -65,7 +65,8 @@ public class Sound : MonoBehaviour
 
     public static void Generate(SoundLevel soundLevel, Vector3 position)
     {
-        GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        //GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        GameObject soundPrefub = LoadPrefubData.instance._sound;
 
         GameObject newSound = Instantiate(soundPrefub, position, Quaternion.identity);
 
@@ -77,7 +78,8 @@ public class Sound : MonoBehaviour
 
     public static void Generate(float volume, Vector3 position)
     {
-        GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        //GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        GameObject soundPrefub = LoadPrefubData.instance._sound;
 
         GameObject newSound = Instantiate(soundPrefub, position, Quaternion.identity);
 
@@ -87,7 +89,8 @@ public class Sound : MonoBehaviour
 
     public static GameObject AutoAdjustGenerate(float currentValue, float maxValue, Vector3 position, float maxSoundVolume)
     {
-        GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        //GameObject soundPrefub = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/Sound.prefab");
+        GameObject soundPrefub = LoadPrefubData.instance._sound;
 
         GameObject newSound = Instantiate(soundPrefub, position, Quaternion.identity);
 

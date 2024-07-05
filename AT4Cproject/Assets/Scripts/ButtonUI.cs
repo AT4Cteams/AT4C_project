@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ButtonUI : MonoBehaviour
@@ -37,12 +38,14 @@ public class ButtonUI : MonoBehaviour
     public void NewGame()
     {
         Debug.Log("NewGame");
+        SceneManager.LoadScene(1);
     }
 
     // 続きからスタート
     public void Continue()
     {
         Debug.Log("Continue");
+        SceneManager.LoadScene(1);
     }
 
     // 設定画面へ

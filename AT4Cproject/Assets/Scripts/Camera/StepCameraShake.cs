@@ -90,7 +90,7 @@ public class StepCameraShake : MonoBehaviour
 
             if (_camera.stepAddHeight > -0.1f)
             {
-                _camera.stepAddHeight -= _returnHeightSpeed;
+                _camera.stepAddHeight -= _returnHeightSpeed * Time.deltaTime;
                 yield return null;
             }
             else
@@ -109,7 +109,7 @@ public class StepCameraShake : MonoBehaviour
 
             if (_camera.stepAddHeight < 0f)
             {
-                _camera.stepAddHeight += _returnHeightSpeed;
+                _camera.stepAddHeight += _returnHeightSpeed * Time.deltaTime;
                 yield return null;
             }
             else

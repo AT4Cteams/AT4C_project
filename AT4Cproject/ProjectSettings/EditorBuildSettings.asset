@@ -4,5 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: 76158fdad97ac3f429f4de688190fbba
+  - enabled: 1
+    path: Assets/Scenes/murakami2.unity
+    guid: c1b2a99d969568a4faeddaf88eabf043
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

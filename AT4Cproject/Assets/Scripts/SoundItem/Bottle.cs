@@ -18,7 +18,8 @@ public class Bottle : SoundItem
 
         Sound.Generate(_soundVolume, transform.position);
 
-        GameObject glass = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/BrokenGlass.prefab");
+        //GameObject glass = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefub/BrokenGlass.prefab");
+        GameObject glass = LoadPrefubData.instance._brokenGrass;
         Instantiate(glass, transform.position, Quaternion.identity);
 
         Destroy(this.gameObject);
